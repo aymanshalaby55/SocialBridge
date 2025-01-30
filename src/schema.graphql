@@ -1,0 +1,30 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type UserSetting {
+  userId: Int!
+  recivedNotif: Boolean!
+  receiveEmails: Boolean!
+}
+
+type User {
+  id: Int!
+  name: String!
+  mock: String
+  settings: UserSetting
+}
+
+type Query {
+  userById(id: Float!): User
+  getUsers: [User!]!
+}
+
+type Mutation {
+  addUser(userInput: CreateUserInput!): User!
+}
+
+input CreateUserInput {
+  name: String!
+  mock: String!
+}
