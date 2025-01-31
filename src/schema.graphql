@@ -2,29 +2,25 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type UserSetting {
-  userId: Int!
-  recivedNotif: Boolean!
-  receiveEmails: Boolean!
-}
-
-type User {
-  id: Int!
-  name: String!
-  mock: String
-  settings: UserSetting
-}
-
 type Query {
-  userById(id: Float!): User
-  getUsers: [User!]!
+  healthCheck: String!
+  protectedRoute: String!
 }
 
 type Mutation {
-  addUser(userInput: CreateUserInput!): User!
+  login(loginInput: LoginInput!): String!
+  signup(signupInput: SignupInput!): String!
+  logout: String!
 }
 
-input CreateUserInput {
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input SignupInput {
+  email: String!
+  password: String!
+  confirmPassword: String!
   name: String!
-  mock: String!
 }

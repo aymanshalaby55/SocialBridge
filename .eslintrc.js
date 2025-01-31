@@ -18,6 +18,8 @@ module.exports = {
   ignorePatterns: ['.eslintrc.js'],
   rules: {
     // Your custom rules
+
+    'prettier/prettier': ['error', { endOfLine: 'auto' }],
     '@typescript-eslint/interface-name-prefix': 'off', // Disable interface name prefix rule
     '@typescript-eslint/explicit-function-return-type': 'off', // Disable explicit return types for functions
     '@typescript-eslint/explicit-module-boundary-types': 'off', // Disable explicit module boundary types
@@ -42,7 +44,7 @@ module.exports = {
       { argsIgnorePattern: 'req|res|next|val|err' },
     ], // TypeScript unused vars rule
     'import/order': [
-      'error',
+      'warn',
       {
         pathGroups: [
           {
@@ -55,16 +57,7 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off', // Disable no-extraneous-dependencies rule
     'node/no-extraneous-import': 'off', // Disable no-extraneous-import rule
     'node/no-unpublished-import': 'off', // Disable no-unpublished-import rule
-    'import/extensions': [
-      'error',
-      'ignorePackages',
-      {
-        js: 'never',
-        jsx: 'never',
-        ts: 'never',
-        tsx: 'never',
-      },
-    ], // Handle file extensions
+    'import/extensions': 'off',
     camelcase: 'off', // Disable camelcase rule
     'import/prefer-default-export': 'off', // Disable prefer-default-export rule
   },
