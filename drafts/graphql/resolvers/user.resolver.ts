@@ -11,10 +11,10 @@ import { users } from '../mocks/users.mock';
 import { userSettings } from '../mocks/userSetting.mock';
 import { CreateUserInput } from '../inputs/createUser.input';
 
-@Resolver((of) => User)
+@Resolver(() => User)
 export class UserResolver {
-  @Query((returns) => User, { nullable: true, name: 'userById' })
-  async getUser(@Args('id') id: number) {
+  @Query(() => User, { nullable: true, name: 'userById' })
+  getUser(@Args('id') id: number) {
     return users.find((user) => user.id === id);
   }
 
@@ -23,17 +23,16 @@ export class UserResolver {
     return users;
   }
 
-  @ResolveField((returns) => userSettings, { nullable: true })
+  @ResolveField(() => userSettings, { nullable: true })
   settings(@Parent() user: User) {
     return userSettings.find((setting) => setting.userId === user.id);
   }
 
-  @Mutation((returns) => User)
+  @Mutation(() => User)
   addUser(@Args('userInput') user: CreateUserInput) {
     const { name, mock } = user;
     const newUser: User = { name, mock, id: 6 };
     users.push(newUser);
-    console.log(users);
     return newUser;
   }
 }

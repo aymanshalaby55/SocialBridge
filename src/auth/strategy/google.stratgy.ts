@@ -14,21 +14,24 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     });
 
     // Ensure required env variables exist
-    if (!configService.get('GOOGLE_CLIENT_ID') || !configService.get('GOOGLE_CLIENT_SECRET')) {
+    if (
+      !configService.get('GOOGLE_CLIENT_ID') ||
+      !configService.get('GOOGLE_CLIENT_SECRET')
+    ) {
       throw new Error('Missing Google OAuth environment variables');
     }
   }
 
-  async validate(
+  validate(
     accessToken: string,
     refreshToken: string,
     profile: Partial<Profile>,
     done: VerifyCallback,
-  ): Promise<void> {
+  ): void {
     try {
       const { name, emails, photos } = profile;
       if (!emails?.length) {
-        return done(new Error('No email found'), null);
+        done(new Error('No email found'), null);
       }
 
       const user = {

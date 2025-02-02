@@ -1,12 +1,13 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
 import { AuthService } from './auth.service';
 import { LoginInput } from './dto/login.input';
 import { SignupInput } from './dto/signup.input';
 import { UserDto } from './dto/user.dto';
-import { GoogleAuthGuard } from './guards/google.guard';
 import { JwtAuthGuard } from './guards/jwt.guard';
+import { GetUser } from 'src/common/decorators/getUser.decorator';
+// import {  } from './guards/google.guard';
 
 @Resolver(() => UserDto)
 export class AuthResolver {
@@ -16,21 +17,6 @@ export class AuthResolver {
   healthCheck() {
     return 'Auth service is healthy';
   }
-
-  // if there is not way for this just make it with REST.
-  //   @Query(() => String)
-  //   @UseGuards(GoogleAuthGuard)
-  //   async googleLogin() {
-  //     return 'Redirecting to Google...';
-  //   }
-
-  //   @Query(() => String)
-  //   @UseGuards(GoogleAuthGuard)
-  //   async googleLoginCallback(@Context('req') req: Request) {
-  //     // After successful authentication, the user will be stored in the session
-  //     console.log(req);
-  //     return `Logged in as ${req}`;
-  //   }
 
   @Mutation(() => String)
   async login(@Args('loginInput') loginInput: LoginInput) {
@@ -44,15 +30,16 @@ export class AuthResolver {
     return access_token;
   }
 
+  // protected rout for testing
   @Query(() => String)
   @UseGuards(JwtAuthGuard)
-  async protectedRoute() {
-    return 'This is a protected route';
+  protectedRoute(@GetUser() user) {
+    return user;
   }
 
-  @Mutation(() => String)
-  @UseGuards(JwtAuthGuard)
-   logout() {
-    return 'Logged out successfully (remove your JWT token)';
-  }
+  // @Mutation(() => String)
+  // @UseGuards(JwtAuthGuard)
+  // logout() {
+  //   return 'Logged out successfully (remove your JWT token)';
+  // }
 }

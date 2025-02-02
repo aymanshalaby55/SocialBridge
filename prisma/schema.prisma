@@ -13,12 +13,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String
-  password  String?
-  googleId  String?  @unique
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  name     String
+  password String
+
+  posts Post[]
+}
+
+model Post {
+  id      Int    @id @default(autoincrement())
+  title   String
+  content String @db.Text
+  // status    PostStatus @default(PUBLISHED)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Optional fields
+  imageUrl String?
+
+  // Metrics
+  viewCount Int @default(0)
+
+  userId Int
+  // Relations
+  user   User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // For soft delete
+  deletedAt DateTime?
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("posts")
 }

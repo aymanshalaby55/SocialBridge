@@ -27,5 +27,3 @@ export const userSettings: UserSetting[] = [
     receiveEmails: true,
   },
 ];
-
-

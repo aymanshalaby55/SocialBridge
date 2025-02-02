@@ -2,6 +2,24 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type PostDto {
+  id: Int!
+  title: String!
+  content: String!
+  imageUrl: String
+  viewCount: Int
+  userId: Int!
+  user: UserDto
+}
+
+type UserDto {
+  id: ID!
+  email: String!
+  name: String!
+  password: String!
+  posts: [PostDto!]
+}
+
 type Query {
   healthCheck: String!
   protectedRoute: String!
@@ -10,7 +28,11 @@ type Query {
 type Mutation {
   login(loginInput: LoginInput!): String!
   signup(signupInput: SignupInput!): String!
-  logout: String!
+  createPost(CreatePostInput: CreatePostInput!): PostDto!
+  updatePost(postId: Int!, UpdatePostInput: CreatePostInput!): PostDto!
+  deletePost(postId: Int!): Boolean!
+  getPostsByUser: [PostDto!]!
+  getPostById(postId: Int!): PostDto!
 }
 
 input LoginInput {
@@ -23,4 +45,10 @@ input SignupInput {
   password: String!
   confirmPassword: String!
   name: String!
+}
+
+input CreatePostInput {
+  title: String!
+  content: String!
+  imageUrl: String
 }

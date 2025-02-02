@@ -43,17 +43,7 @@ module.exports = {
       'warn',
       { argsIgnorePattern: 'req|res|next|val|err' },
     ], // TypeScript unused vars rule
-    'import/order': [
-      'warn',
-      {
-        pathGroups: [
-          {
-            pattern: '^~/**',
-            group: 'external',
-          },
-        ],
-      },
-    ], // Enforce import order
+    'import/order': 'off', // Disable import order rule
     'import/no-extraneous-dependencies': 'off', // Disable no-extraneous-dependencies rule
     'node/no-extraneous-import': 'off', // Disable no-extraneous-import rule
     'node/no-unpublished-import': 'off', // Disable no-unpublished-import rule

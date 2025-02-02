@@ -14,7 +14,7 @@ export class GoogleAuthGuard extends AuthGuard('google') {
     return ctx.getContext().req;
   }
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
+  canActivate(context: ExecutionContext): Promise<boolean> {
     const req = this.getRequest(context);
     const googleAuthUrl = this.configService.get<string>('GOOGLE_CALLBACK_URL');
 
@@ -23,7 +23,9 @@ export class GoogleAuthGuard extends AuthGuard('google') {
     }
 
     if (!req.user) {
-      throw new Error(`Google OAuth requires a redirection. Use this URL: ${googleAuthUrl}`);
+      throw new Error(
+        `Google OAuth requires a redirection. Use this URL: ${googleAuthUrl}`,
+      );
     }
 
     return super.canActivate(context) as Promise<boolean>;
