@@ -20,6 +20,7 @@ model User {
   password String
 
   posts Post[]
+  Like  Like[]
 }
 
 model Post {
@@ -43,8 +44,27 @@ model Post {
 
   // For soft delete
   deletedAt DateTime?
+  Like      Like[]
 
   @@index([userId])
   @@index([createdAt])
   @@map("posts")
+}
+
+model Like {
+  id     Int @id @default(autoincrement())
+  userId Int
+  postId Int
+
+  emoji String? @default("👍") // New field for storing emojis with default thumbs up
+
+  // Relations
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, postId])
+  @@map("likes")
 }

@@ -9,7 +9,22 @@ type PostDto {
   imageUrl: String
   viewCount: Int
   userId: Int!
+  likeIDs: [Int!]!
 }
+
+type LikeDto {
+  id: ID!
+  userId: Int!
+  postId: Int!
+  emoji: String
+  createdAt: DateTime!
+  updatedAt: DateTime
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type UserDto {
   id: ID!
@@ -17,6 +32,7 @@ type UserDto {
   name: String!
   password: String!
   posts: [PostDto!]
+  likes: [LikeDto!]
 }
 
 type Query {
@@ -25,6 +41,9 @@ type Query {
   getPostsByUser: [PostDto!]!
   getUser(userId: Int!): UserDto!
   getUsers: [UserDto!]!
+  getLikesByPost(postId: Int!): [LikeDto!]!
+  getLikesByUser: [LikeDto!]!
+  getLikeById(likeId: Int!): LikeDto!
 }
 
 type Mutation {
@@ -36,6 +55,10 @@ type Mutation {
   getPostById(postId: Int!): PostDto!
   updateUserProfile(userProfileUpdates: UpdateUserInput!): UserDto!
   deleteUser: Boolean!
+  createLike(likeInput: UserLikesInput!): LikeDto!
+  updateLikeEmoji(likeInput: UserLikesInput!): LikeDto!
+  deleteLike(likeId: Int!): LikeDto!
+  deleteLikeByUserAndPost(postId: Int!): LikeDto!
 }
 
 input LoginInput {
@@ -54,9 +77,15 @@ input CreatePostInput {
   title: String!
   content: String!
   imageUrl: String
+  likeIDs: [Int!]!
 }
 
 input UpdateUserInput {
   name: String
   password: String
+}
+
+input UserLikesInput {
+  postId: Int!
+  emoji: String
 }

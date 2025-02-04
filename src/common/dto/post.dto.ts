@@ -12,6 +12,7 @@ import {
 export class PostDto {
   @Field(() => Int)
   @IsNumber({ maxDecimalPlaces: 0 })
+  @IsNotEmpty()
   id: number;
 
   @Field()
@@ -38,4 +39,8 @@ export class PostDto {
   @Field(() => Int)
   @IsNumber()
   userId: number;
+
+  @Field(() => [Int])
+  @IsNumber({}, { each: true })
+  likeIDs: number[];
 }

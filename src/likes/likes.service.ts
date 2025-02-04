@@ -1,0 +1,181 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma.service';
+import { Like } from '@prisma/client';
+import { LikeDto } from 'src/common/dto/like.dto';
+
+@Injectable()
+export class LikesService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async createLike(
+    userId: number,
+    postId: number,
+    emoji: string,
+  ): Promise<LikeDto> {
+    // Validate user exists
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Validate post exists
+    const post = await this.prisma.post.findUnique({
+      where: { id: postId },
+    });
+    if (!post) {
+      throw new Error('Post not found');
+    }
+
+    const like = await this.prisma.like.create({
+      data: {
+        userId,
+        postId,
+        emoji,
+      },
+    });
+    return like;
+  }
+
+  async getLikesByPost(postId: number): Promise<Like[]> {
+    // Validate post exists
+    const post = await this.prisma.post.findUnique({
+      where: { id: postId },
+    });
+
+    if (!post) {
+      throw new Error('Post not found');
+    }
+
+    return await this.prisma.like.findMany({
+      where: { postId },
+    });
+  }
+
+  async getLikesByUser(userId: number): Promise<Like[]> {
+    // Validate user exists
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const likes = await this.prisma.like.findMany({
+      where: { userId },
+    });
+    console.log(likes);
+    return likes;
+  }
+
+  async getLikeById(id: number): Promise<Like | null> {
+    return await this.prisma.like.findUnique({
+      where: { id },
+    });
+  }
+
+  async deleteLike(id: number): Promise<Like> {
+    // Validate like exists
+    const like = await this.prisma.like.findUnique({
+      where: { id },
+    });
+    if (!like) {
+      throw new Error('Like not found');
+    }
+
+    return await this.prisma.like.delete({
+      where: { id },
+    });
+  }
+
+  async updateLikeEmoji(
+    userId: number,
+    postId: number,
+    emoji: string,
+  ): Promise<Like> {
+    // Validate user exists
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Validate post exists
+    const post = await this.prisma.post.findUnique({
+      where: { id: postId },
+    });
+    if (!post) {
+      throw new Error('Post not found');
+    }
+
+    // Validate like exists
+    const like = await this.prisma.like.findUnique({
+      where: {
+        userId_postId: {
+          userId,
+          postId,
+        },
+      },
+    });
+
+    if (!like) {
+      throw new Error('Like not found');
+    }
+
+    return await this.prisma.like.update({
+      where: {
+        userId_postId: {
+          userId,
+          postId,
+        },
+      },
+      data: {
+        emoji,
+      },
+    });
+  }
+
+  async deleteLikeByUserAndPost(userId: number, postId: number): Promise<Like> {
+    // Validate user exists
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Validate post exists
+    const post = await this.prisma.post.findUnique({
+      where: { id: postId },
+    });
+    if (!post) {
+      throw new Error('Post not found');
+    }
+
+    // Validate like exists
+    const like = await this.prisma.like.findUnique({
+      where: {
+        userId_postId: {
+          userId,
+          postId,
+        },
+      },
+    });
+
+    if (!like) {
+      throw new Error('Like not found');
+    }
+
+    return await this.prisma.like.delete({
+      where: {
+        userId_postId: {
+          userId,
+          postId,
+        },
+      },
+    });
+  }
+}

@@ -6,7 +6,8 @@ import {
   IsNumber,
 } from 'class-validator';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { PostDto } from 'src/posts/dto/post.dto';
+import { PostDto } from 'src/common/dto/post.dto';
+import { LikeDto } from 'src/common/dto/like.dto';
 
 @ObjectType()
 export class UserDto {
@@ -32,4 +33,7 @@ export class UserDto {
 
   @Field(() => [PostDto], { nullable: true })
   posts?: PostDto[];
+
+  @Field(() => [LikeDto], { nullable: true })
+  likes?: LikeDto[];
 }
