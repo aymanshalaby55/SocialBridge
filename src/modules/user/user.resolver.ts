@@ -12,8 +12,8 @@ import { UpdateUserInput } from './dto/updateUser.input';
 import { GetUser } from 'src/common/decorators/getUser.decorator';
 import { UserDto } from 'src/common/dto/user.dto';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { PostsService } from 'src/posts/posts.service';
+import { JwtAuthGuard } from 'src/modules/auth/guards/jwt.guard';
+import { PostsService } from 'src/modules/posts/posts.service';
 
 @Resolver(() => UserDto)
 @UseGuards(JwtAuthGuard)

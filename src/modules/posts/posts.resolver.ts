@@ -1,8 +1,8 @@
 import { Args, Int, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { PostsService } from './posts.service';
 import { CreatePostInput } from './dto/createPost.input';
-import { PostDto } from '../common/dto/post.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { PostDto } from '../../common/dto/post.dto';
+import { JwtAuthGuard } from 'src/modules/auth/guards/jwt.guard';
 import { UseGuards } from '@nestjs/common';
 import { GetUser } from 'src/common/decorators/getUser.decorator';
 

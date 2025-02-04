@@ -5,10 +5,10 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import * as depthLimit from 'graphql-depth-limit';
 
 import { PrismaService } from './prisma.service';
-import { AuthModule } from './auth/auth.module';
-import { PostsModule } from './posts/posts.module';
-import { UserModule } from './user/user.module';
-import { LikesModule } from './likes/likes.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { PostsModule } from './modules/posts/posts.module';
+import { UserModule } from './modules/user/user.module';
+import { LikesModule } from './modules/likes/likes.module';
 
 @Global()
 @Module({

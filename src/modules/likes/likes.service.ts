@@ -76,7 +76,7 @@ export class LikesService {
     });
   }
 
-  async deleteLike(id: number): Promise<Like> {
+  async deleteLike(id: number): Promise<boolean> {
     // Validate like exists
     const like = await this.prisma.like.findUnique({
       where: { id },
@@ -85,9 +85,10 @@ export class LikesService {
       throw new Error('Like not found');
     }
 
-    return await this.prisma.like.delete({
+    await this.prisma.like.delete({
       where: { id },
     });
+    return true;
   }
 
   async updateLikeEmoji(
