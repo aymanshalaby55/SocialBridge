@@ -1,4 +1,11 @@
-import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { UserSetting } from '../models/userSetting';
 import { userSettings } from '../mocks/userSetting.mock';
 
@@ -10,7 +17,11 @@ export class UserSettingResolver {
   }
 
   @Mutation((returns) => UserSetting)
-  updateUserSetting(@Args('userId') userId: number, @Args('recivedNotif') recivedNotif: boolean, @Args('receiveEmails') receiveEmails: boolean) {
+  updateUserSetting(
+    @Args('userId') userId: number,
+    @Args('recivedNotif') recivedNotif: boolean,
+    @Args('receiveEmails') receiveEmails: boolean,
+  ) {
     const setting = userSettings.find((setting) => setting.userId === userId);
     if (setting) {
       setting.recivedNotif = recivedNotif;

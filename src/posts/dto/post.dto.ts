@@ -7,7 +7,6 @@ import {
   Min,
   IsOptional,
 } from 'class-validator';
-import { UserDto } from 'src/auth/dto/user.dto';
 
 @ObjectType()
 export class PostDto {
@@ -39,7 +38,4 @@ export class PostDto {
   @Field(() => Int)
   @IsNumber()
   userId: number;
-
-  @Field(() => UserDto, { nullable: true })
-  user?: UserDto;
 }

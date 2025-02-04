@@ -9,7 +9,6 @@ type PostDto {
   imageUrl: String
   viewCount: Int
   userId: Int!
-  user: UserDto
 }
 
 type UserDto {
@@ -23,6 +22,9 @@ type UserDto {
 type Query {
   healthCheck: String!
   protectedRoute: String!
+  getPostsByUser: [PostDto!]!
+  getUser(userId: Int!): UserDto!
+  getUsers: [UserDto!]!
 }
 
 type Mutation {
@@ -31,8 +33,9 @@ type Mutation {
   createPost(CreatePostInput: CreatePostInput!): PostDto!
   updatePost(postId: Int!, UpdatePostInput: CreatePostInput!): PostDto!
   deletePost(postId: Int!): Boolean!
-  getPostsByUser: [PostDto!]!
   getPostById(postId: Int!): PostDto!
+  updateUserProfile(userProfileUpdates: UpdateUserInput!): UserDto!
+  deleteUser: Boolean!
 }
 
 input LoginInput {
@@ -51,4 +54,9 @@ input CreatePostInput {
   title: String!
   content: String!
   imageUrl: String
+}
+
+input UpdateUserInput {
+  name: String
+  password: String
 }

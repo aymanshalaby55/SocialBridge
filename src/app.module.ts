@@ -1,12 +1,15 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import * as depthLimit from 'graphql-depth-limit';
 
 import { PrismaService } from './prisma.service';
 import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './posts/posts.module';
+import { UserModule } from './user/user.module';
 
+@Global()
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -14,10 +17,13 @@ import { PostsModule } from './posts/posts.module';
       driver: ApolloDriver,
       autoSchemaFile: 'src/schema.graphql',
       context: ({ req, res }) => ({ req, res }),
+      validationRules: [depthLimit(3)],
     }),
     AuthModule,
     PostsModule,
+    UserModule,
   ],
   providers: [PrismaService],
+  exports: [PrismaService],
 })
 export class AppModule {}

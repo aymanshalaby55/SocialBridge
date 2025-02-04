@@ -4,6 +4,6 @@ import { PostDto } from './post.dto';
 @InputType()
 export class CreatePostInput extends OmitType(
   PostDto,
-  ['id', 'user', 'viewCount', 'userId'],
+  ['id', 'viewCount', 'userId'],
   InputType,
 ) {}

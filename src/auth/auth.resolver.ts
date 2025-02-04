@@ -4,7 +4,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { LoginInput } from './dto/login.input';
 import { SignupInput } from './dto/signup.input';
-import { UserDto } from './dto/user.dto';
+import { UserDto } from '../common/dto/user.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { GetUser } from 'src/common/decorators/getUser.decorator';
 // import {  } from './guards/google.guard';

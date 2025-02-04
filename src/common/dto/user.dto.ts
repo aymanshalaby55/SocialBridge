@@ -5,13 +5,13 @@ import {
   IsString,
   IsNumber,
 } from 'class-validator';
-import { Field, ObjectType, ID } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { PostDto } from 'src/posts/dto/post.dto';
 
 @ObjectType()
 export class UserDto {
   @Field(() => ID)
-  @IsNumber()
+  @IsNumber({ maxDecimalPlaces: 0 })
   @IsNotEmpty()
   id: number;
 
