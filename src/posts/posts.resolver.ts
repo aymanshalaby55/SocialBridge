@@ -1,19 +1,10 @@
-import {
-  Args,
-  Int,
-  Mutation,
-  Parent,
-  ResolveField,
-  Resolver,
-  Query,
-} from '@nestjs/graphql';
+import { Args, Int, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { PostsService } from './posts.service';
 import { CreatePostInput } from './dto/createPost.input';
 import { PostDto } from './dto/post.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { UseGuards } from '@nestjs/common';
 import { GetUser } from 'src/common/decorators/getUser.decorator';
-import { UserDto } from 'src/common/dto/user.dto';
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => PostDto)
@@ -45,7 +36,6 @@ export class PostsResolver {
 
   @Query(() => [PostDto])
   getPostsByUser(@GetUser() user) {
-    console.log('u');
     return this.postsService.getPostsByUser(user.id);
   }
 
