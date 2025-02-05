@@ -36,6 +36,14 @@ type CommentDto {
   postId: Float!
 }
 
+type FriendDto {
+  id: ID!
+  userId: Int!
+  friendUserId: Int!
+  status: String!
+  createdAt: DateTime!
+}
+
 type UserDto {
   id: ID!
   email: String!
@@ -44,6 +52,7 @@ type UserDto {
   posts: [PostDto!]
   likes: [LikeDto!]
   comments: [CommentDto!]
+  friends: [FriendDto!]
 }
 
 type Query {

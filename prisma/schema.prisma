@@ -19,9 +19,11 @@ model User {
   name     String
   password String
 
-  posts   Post[]
-  Like    Like[]
-  Comment Comment[]
+  posts          Post[]
+  Like           Like[]
+  Comment        Comment[]
+  UserFriends    Friends[] @relation("UserFriends")
+  FriendsRequest Friends[] @relation("requestFriend")
 }
 
 model Post {
@@ -89,4 +91,22 @@ model Comment {
   @@map("comments")
 }
 
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
 
+model Friends {
+  id           String           @id @default(uuid())
+  userId       Int // actual user
+  friendUserId Int // target
+  status       FriendshipStatus @default(PENDING)
+  createdAt    DateTime         @default(now())
+
+  user   User @relation("UserFriends", fields: [userId], references: [id])
+  friend User @relation("requestFriend", fields: [friendUserId], references: [id])
+
+  @@unique([userId, friendUserId])
+  @@map("friends")
+}
