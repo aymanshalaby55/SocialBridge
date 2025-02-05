@@ -64,8 +64,9 @@ type Query {
   getLikesByPost(postId: Int!): [LikeDto!]!
   getLikesByUser: [LikeDto!]!
   getLikeById(likeId: Int!): LikeDto!
-  comments: [CommentDto!]!
-  comment(id: Float!): CommentDto!
+  comments(userId: Int!): [CommentDto!]!
+  comment(id: Int!): CommentDto!
+  getUserFriends: [FriendDto!]!
 }
 
 type Mutation {
@@ -83,7 +84,10 @@ type Mutation {
   deleteLikeByUserAndPost(postId: Int!): LikeDto!
   createComment(createCommentInput: CreateCommentInput!): CommentDto!
   updateComment(updateCommentInput: UpdateCommentInput!): CommentDto!
-  deleteComment(id: Int!): String!
+  deleteComment(id: Int!): Boolean!
+  addFriend(targetId: Int!): FriendDto!
+  rejectFriendRequest(friendId: Int!): FriendDto!
+  acceptFriendRequest(friendId: Int!): FriendDto!
 }
 
 input LoginInput {

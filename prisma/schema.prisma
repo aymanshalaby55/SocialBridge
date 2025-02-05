@@ -98,7 +98,7 @@ enum FriendshipStatus {
 }
 
 model Friends {
-  id           String           @id @default(uuid())
+  id           Int              @id @default(autoincrement())
   userId       Int // actual user
   friendUserId Int // target
   status       FriendshipStatus @default(PENDING)

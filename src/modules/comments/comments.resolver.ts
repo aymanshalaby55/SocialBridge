@@ -13,13 +13,17 @@ export class CommentsResolver {
   constructor(private readonly commentsService: CommentsService) {}
 
   @Query(() => [CommentDto], { name: 'comments' })
-  getComments(): Promise<CommentDto[]> {
-    return this.commentsService.findAll();
+  getUserComments(
+    @Args('userId', { type: () => Int }) userId: number,
+  ): Promise<CommentDto[]> {
+    return this.commentsService.findUserComments(userId);
   }
 
   @Query(() => CommentDto, { name: 'comment' })
-  getCommentbyId(@Args('id') id: number): Promise<CommentDto> {
-    return this.commentsService.findOne(id);
+  getCommentById(
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<CommentDto> {
+    return this.commentsService.findCommentById(id);
   }
 
   @Mutation(() => CommentDto)
@@ -27,8 +31,7 @@ export class CommentsResolver {
     @Args('createCommentInput') createCommentInput: CreateCommentInput,
     @GetUser() user,
   ): Promise<CommentDto> {
-    console.log(user);
-    return this.commentsService.create(createCommentInput, user.id);
+    return this.commentsService.createCommet(createCommentInput, user.id);
   }
 
   @Mutation(() => CommentDto)
@@ -36,17 +39,14 @@ export class CommentsResolver {
     @Args('updateCommentInput') updateCommentInput: UpdateCommentInput,
     @GetUser() user,
   ): Promise<CommentDto> {
-    return this.commentsService.update(updateCommentInput, user.id);
+    return this.commentsService.updateComment(updateCommentInput, user.id);
   }
 
-  @Mutation(() => String)
+  @Mutation(() => Boolean)
   deleteComment(
-    @Args('id', {
-      type: () => Int,
-    })
-    id: number,
+    @Args('id', { type: () => Int }) id: number,
     @GetUser() user,
-  ): Promise<string> {
-    return this.commentsService.remove(id, user.id);
+  ): Promise<boolean> {
+    return this.commentsService.delete(id, user.id);
   }
 }

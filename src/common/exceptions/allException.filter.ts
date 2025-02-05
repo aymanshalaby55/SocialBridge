@@ -18,7 +18,7 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
     return {
       errors: [
         {
-          message: 'Internal server error',
+          message: exception.message,
           extensions: {
             code: 'INTERNAL_SERVER_ERROR',
             exception: {
