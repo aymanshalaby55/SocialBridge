@@ -9,6 +9,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { PostsModule } from './modules/posts/posts.module';
 import { UserModule } from './modules/user/user.module';
 import { LikesModule } from './modules/likes/likes.module';
+import { CommentsModule } from './modules/comments/comments.module';
 
 @Global()
 @Module({
@@ -24,6 +25,7 @@ import { LikesModule } from './modules/likes/likes.module';
     PostsModule,
     UserModule,
     LikesModule,
+    CommentsModule,
   ],
   providers: [PrismaService],
   exports: [PrismaService],

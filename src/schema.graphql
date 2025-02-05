@@ -14,17 +14,27 @@ type PostDto {
 
 type LikeDto {
   id: ID!
-  userId: Int!
-  postId: Int!
   emoji: String
   createdAt: DateTime!
   updatedAt: DateTime
+  userId: Int!
+  postId: Int!
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type CommentDto {
+  id: ID!
+  content: String!
+  createdAt: DateTime!
+  editedAt: DateTime
+  isEdited: Boolean
+  userId: Float!
+  postId: Float!
+}
 
 type UserDto {
   id: ID!
@@ -33,6 +43,7 @@ type UserDto {
   password: String!
   posts: [PostDto!]
   likes: [LikeDto!]
+  comments: [CommentDto!]
 }
 
 type Query {
@@ -44,6 +55,8 @@ type Query {
   getLikesByPost(postId: Int!): [LikeDto!]!
   getLikesByUser: [LikeDto!]!
   getLikeById(likeId: Int!): LikeDto!
+  comments: [CommentDto!]!
+  comment(id: Float!): CommentDto!
 }
 
 type Mutation {
@@ -59,6 +72,9 @@ type Mutation {
   updateLikeEmoji(likeInput: UserLikesInput!): LikeDto!
   deleteLike(likeId: Int!): LikeDto!
   deleteLikeByUserAndPost(postId: Int!): LikeDto!
+  createComment(createCommentInput: CreateCommentInput!): CommentDto!
+  updateComment(id: Float!, updateCommentInput: UpdateCommentInput!): CommentDto!
+  deleteComment(id: Float!): Boolean!
 }
 
 input LoginInput {
@@ -88,4 +104,14 @@ input UpdateUserInput {
 input UserLikesInput {
   postId: Int!
   emoji: String
+}
+
+input CreateCommentInput {
+  content: String!
+  postId: Float!
+}
+
+input UpdateCommentInput {
+  content: String!
+  postId: Float!
 }

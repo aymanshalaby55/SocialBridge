@@ -8,16 +8,6 @@ export class LikeDto {
   @IsNotEmpty()
   id?: number;
 
-  @Field(() => Int)
-  @IsNumber({ maxDecimalPlaces: 0 })
-  @IsNotEmpty()
-  userId?: number;
-
-  @Field(() => Int)
-  @IsNumber({ maxDecimalPlaces: 0 })
-  @IsNotEmpty()
-  postId?: number;
-
   @Field(() => String, { nullable: true, defaultValue: '👍' })
   emoji?: string;
 
@@ -27,4 +17,14 @@ export class LikeDto {
 
   @Field(() => Date, { nullable: true })
   updatedAt?: Date;
+
+  @Field(() => Int)
+  @IsNumber({ maxDecimalPlaces: 0 })
+  @IsNotEmpty()
+  userId?: number;
+
+  @Field(() => Int)
+  @IsNumber({ maxDecimalPlaces: 0 })
+  @IsNotEmpty()
+  postId?: number;
 }

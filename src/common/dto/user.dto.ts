@@ -8,6 +8,7 @@ import {
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { PostDto } from 'src/common/dto/post.dto';
 import { LikeDto } from 'src/common/dto/like.dto';
+import { CommentDto } from './comment.dto';
 
 @ObjectType()
 export class UserDto {
@@ -36,4 +37,7 @@ export class UserDto {
 
   @Field(() => [LikeDto], { nullable: true })
   likes?: LikeDto[];
+
+  @Field(() => [CommentDto], { nullable: true })
+  comments?: CommentDto[];
 }

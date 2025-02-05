@@ -4,5 +4,5 @@ import { UserDto } from 'src/common/dto/user.dto';
 // make sure u update every objecttype here
 @InputType()
 export class UpdateUserInput extends PartialType(
-  OmitType(UserDto, ['id', 'posts', 'email', 'likes'], InputType),
+  OmitType(UserDto, ['id', 'posts', 'email', 'likes', 'comments'], InputType),
 ) {}
