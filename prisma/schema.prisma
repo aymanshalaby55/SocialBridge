@@ -88,3 +88,5 @@ model Comment {
 
   @@map("comments")
 }
+
+

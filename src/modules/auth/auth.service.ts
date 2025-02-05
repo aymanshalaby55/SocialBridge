@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { LoginInput } from './dto/login.input';
@@ -25,7 +25,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new Error('Invalid credentials');
+      throw new ForbiddenException('Invalid credentials');
     }
 
     // Validate password
@@ -35,7 +35,7 @@ export class AuthService {
     );
 
     if (!isPasswordValid) {
-      throw new Error('Invalid credentials');
+      throw new ForbiddenException('Wrong credentials');
     }
 
     const { id, email } = user;

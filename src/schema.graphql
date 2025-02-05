@@ -73,8 +73,8 @@ type Mutation {
   deleteLike(likeId: Int!): LikeDto!
   deleteLikeByUserAndPost(postId: Int!): LikeDto!
   createComment(createCommentInput: CreateCommentInput!): CommentDto!
-  updateComment(id: Float!, updateCommentInput: UpdateCommentInput!): CommentDto!
-  deleteComment(id: Float!): Boolean!
+  updateComment(updateCommentInput: UpdateCommentInput!): CommentDto!
+  deleteComment(id: Int!): String!
 }
 
 input LoginInput {
@@ -108,10 +108,11 @@ input UserLikesInput {
 
 input CreateCommentInput {
   content: String!
-  postId: Float!
+  postId: Int!
 }
 
 input UpdateCommentInput {
   content: String!
-  postId: Float!
+  postId: Int!
+  commentId: Int
 }

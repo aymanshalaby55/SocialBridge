@@ -6,7 +6,7 @@ export class CommentDto {
   @Field(() => ID)
   @IsNumber({ maxDecimalPlaces: 0 })
   @IsNotEmpty()
-  id: number;
+  id?: number;
 
   @Field(() => String)
   @IsString()

@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { CommentDto } from 'src/common/dto/comment.dto';
 import { CommentsService } from './comments.service';
 import { CreateCommentInput } from './dto/createComment.input';
@@ -7,7 +7,7 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { GetUser } from 'src/common/decorators/getUser.decorator';
 
-UseGuards(JwtAuthGuard);
+@UseGuards(JwtAuthGuard)
 @Resolver(() => CommentDto)
 export class CommentsResolver {
   constructor(private readonly commentsService: CommentsService) {}
@@ -18,7 +18,7 @@ export class CommentsResolver {
   }
 
   @Query(() => CommentDto, { name: 'comment' })
-  getComment(@Args('id') id: number): Promise<CommentDto> {
+  getCommentbyId(@Args('id') id: number): Promise<CommentDto> {
     return this.commentsService.findOne(id);
   }
 
@@ -27,20 +27,26 @@ export class CommentsResolver {
     @Args('createCommentInput') createCommentInput: CreateCommentInput,
     @GetUser() user,
   ): Promise<CommentDto> {
+    console.log(user);
     return this.commentsService.create(createCommentInput, user.id);
   }
 
   @Mutation(() => CommentDto)
   updateComment(
-    @Args('id') id: number,
     @Args('updateCommentInput') updateCommentInput: UpdateCommentInput,
     @GetUser() user,
   ): Promise<CommentDto> {
-    return this.commentsService.update(id, updateCommentInput, user.id);
+    return this.commentsService.update(updateCommentInput, user.id);
   }
 
-  @Mutation(() => Boolean)
-  deleteComment(@Args('id') id: number, @GetUser() user): Promise<boolean> {
+  @Mutation(() => String)
+  deleteComment(
+    @Args('id', {
+      type: () => Int,
+    })
+    id: number,
+    @GetUser() user,
+  ): Promise<string> {
     return this.commentsService.remove(id, user.id);
   }
 }

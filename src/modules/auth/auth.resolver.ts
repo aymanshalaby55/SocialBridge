@@ -7,7 +7,6 @@ import { SignupInput } from './dto/signup.input';
 import { UserDto } from '../../common/dto/user.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { GetUser } from 'src/common/decorators/getUser.decorator';
-// import {  } from './guards/google.guard';
 
 @Resolver(() => UserDto)
 export class AuthResolver {
@@ -20,6 +19,7 @@ export class AuthResolver {
 
   @Mutation(() => String)
   async login(@Args('loginInput') loginInput: LoginInput) {
+    console.log(loginInput);
     const { access_token } = await this.authService.login(loginInput);
     return access_token;
   }

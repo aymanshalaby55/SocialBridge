@@ -10,6 +10,7 @@ const commitlint = {
         'ci', // Changes to Continuous Integration setup like GitHub Actions or Travis
         'docs', // Documentation updates
         'feat', // Adding a new feature
+        'subfeat',
         'fix', // Fixing bugs
         'perf', // Performance improvements
         'refactor', // Code restructuring without changing functionality

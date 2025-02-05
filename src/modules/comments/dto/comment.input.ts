@@ -6,7 +6,7 @@ export class CommentInputDto {
   @Field(() => ID)
   @IsNumber({ maxDecimalPlaces: 0 })
   @IsNotEmpty()
-  id: number;
+  id?: number;
 
   @Field(() => String)
   @IsString()
@@ -23,12 +23,12 @@ export class CommentInputDto {
   @Field(() => Boolean, { nullable: true })
   isEdited?: boolean;
 
-  @Field(() => Number)
+  @Field(() => ID)
   @IsNumber({ maxDecimalPlaces: 0 })
   @IsNotEmpty()
   userId: number;
 
-  @Field(() => Number)
+  @Field(() => ID)
   @IsNumber({ maxDecimalPlaces: 0 })
   @IsNotEmpty()
   postId: number;
