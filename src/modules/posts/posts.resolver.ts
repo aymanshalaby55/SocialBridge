@@ -1,15 +1,17 @@
-import { Args, Int, Mutation, Resolver, Query } from '@nestjs/graphql';
+import { Args, Int, Mutation, Resolver, Query, ResolveField, Parent } from '@nestjs/graphql';
 import { PostsService } from './posts.service';
 import { CreatePostInput } from './dto/createPost.input';
 import { PostDto } from '../../common/dto/post.dto';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt.guard';
 import { UseGuards } from '@nestjs/common';
 import { GetUser } from 'src/common/decorators/getUser.decorator';
+import { CommentsService } from '../comments/comments.service';
+import { CommentDto } from 'src/common/dto/comment.dto';
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => PostDto)
 export class PostsResolver {
-  constructor(private readonly postsService: PostsService) {}
+  constructor(private readonly postsService: PostsService, private readonly commentService: CommentsService) { }
 
   @Mutation(() => PostDto)
   createPost(@Args('CreatePostInput') post: CreatePostInput, @GetUser() user) {
@@ -46,4 +48,12 @@ export class PostsResolver {
   ) {
     return this.postsService.getPostById(postId, user.id);
   }
+
+  // this for getPostBy id
+  @ResolveField('comments', () => CommentDto , {nullable: true})
+  getPostComments(@Parent() post) {
+    return this.commentService.getPostComments(post.id);
+  }
+
+
 }

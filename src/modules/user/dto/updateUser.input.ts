@@ -6,7 +6,7 @@ import { UserDto } from 'src/common/dto/user.dto';
 export class UpdateUserInput extends PartialType(
   OmitType(
     UserDto,
-    ['id', 'posts', 'email', 'likes', 'comments', 'friends'],
+    ['id', 'email'],
     InputType,
   ),
 ) {}

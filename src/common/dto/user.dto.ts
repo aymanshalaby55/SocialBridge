@@ -33,15 +33,15 @@ export class UserDto {
   @MinLength(8)
   password: string;
 
-  @Field(() => [PostDto], { nullable: true })
-  posts?: PostDto[];
+  // @Field(() => [PostDto], { nullable: true })
+  // posts?: PostDto[];
 
-  @Field(() => [LikeDto], { nullable: true })
-  likes?: LikeDto[];
+  // @Field(() => [LikeDto], { nullable: true })
+  // likes?: LikeDto[];
 
-  @Field(() => [CommentDto], { nullable: true })
-  comments?: CommentDto[];
+  // @Field(() => [CommentDto], { nullable: true })
+  // comments?: CommentDto[];
 
-  @Field(() => [FriendDto], { nullable: true })
-  friends?: FriendDto[];
+  // @Field(() => [FriendDto], { nullable: true })
+  // friends?: FriendDto[];
 }

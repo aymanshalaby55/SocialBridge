@@ -17,6 +17,10 @@ import { PostsService } from 'src/modules/posts/posts.service';
 import { FriendsService } from '../friends/friends.service';
 import { LikesService } from '../likes/likes.service';
 import { CommentsService } from '../comments/comments.service';
+import { CommentDto } from 'src/common/dto/comment.dto';
+import { FriendDto } from 'src/common/dto/friend.dto';
+import { LikeDto } from 'src/common/dto/like.dto';
+import { PostDto } from 'src/common/dto/post.dto';
 
 @Resolver(() => UserDto)
 @UseGuards(JwtAuthGuard)
@@ -31,6 +35,7 @@ export class UserResolver {
 
   @Query(() => UserDto)
   getUser(@Args('userId', { type: () => Int }) userId: number) {
+    console.log("");
     return this.userService.getUserById(userId);
   }
 
@@ -42,6 +47,7 @@ export class UserResolver {
     return this.userService.updateUser(user.id, updates);
   }
 
+  // only for admin 
   @Query(() => [UserDto])
   getUsers() {
     return this.userService.getUsers();
@@ -53,22 +59,22 @@ export class UserResolver {
   }
 
   // resolved Fields
-  @ResolveField()
+  @ResolveField('posts' , ()=>PostDto)
   posts(@Parent() user: UserDto) {
     return this.postsService.getPostsByUser(user.id);
   }
 
-  @ResolveField()
+  @ResolveField('friends', () => FriendDto)
   friends(@Parent() user: UserDto) {
     return this.friendsService.getUserFriends(user.id);
   }
 
-  @ResolveField()
+  @ResolveField('likes' , ()=> LikeDto)
   likes(@Parent() user: UserDto) {
     return this.likesService.getLikesByUser(user.id);
   }
 
-  @ResolveField()
+  @ResolveField('comments', ()=>CommentDto)
   comments(@Parent() user: UserDto) {
     console.log(user);
     return this.commentsService.findUserComments(user.id);

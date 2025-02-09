@@ -2,6 +2,17 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type UserDto {
+  id: ID!
+  email: String!
+  name: String!
+  password: String!
+  posts: PostDto!
+  friends: FriendDto!
+  likes: LikeDto!
+  comments: CommentDto!
+}
+
 type PostDto {
   id: Int!
   title: String!
@@ -9,22 +20,8 @@ type PostDto {
   imageUrl: String
   viewCount: Int
   userId: Int!
-  likeIDs: [Int!]!
+  comments: CommentDto
 }
-
-type LikeDto {
-  id: ID!
-  emoji: String
-  createdAt: DateTime!
-  updatedAt: DateTime
-  userId: Int!
-  postId: Int!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type CommentDto {
   id: ID!
@@ -36,6 +33,11 @@ type CommentDto {
   postId: Float!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type FriendDto {
   id: ID!
   userId: Int!
@@ -44,15 +46,13 @@ type FriendDto {
   createdAt: DateTime!
 }
 
-type UserDto {
+type LikeDto {
   id: ID!
-  email: String!
-  name: String!
-  password: String!
-  posts: [PostDto!]
-  likes: [LikeDto!]
-  comments: [CommentDto!]
-  friends: [FriendDto!]
+  emoji: String
+  createdAt: DateTime!
+  updatedAt: DateTime
+  userId: Int!
+  postId: Int!
 }
 
 type Query {
@@ -106,7 +106,6 @@ input CreatePostInput {
   title: String!
   content: String!
   imageUrl: String
-  likeIDs: [Int!]!
 }
 
 input UpdateUserInput {

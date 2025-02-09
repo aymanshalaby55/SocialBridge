@@ -12,20 +12,13 @@ import { UpdateCommentInput } from './dto/updateComment.input';
 export class CommentsService {
   constructor(private prisma: PrismaService) {}
 
-  /**
-   * Fetch all comments for a specific user.
-   * @param userId - The ID of the user to fetch comments for
-   */
+
   async findUserComments(userId: number): Promise<CommentDto[]> {
     return await this.prisma.comment.findMany({
       where: { userId },
     });
   }
 
-  /**
-   * Fetch a single comment by ID.
-   * @param id - The ID of the comment to fetch.
-   */
   async findCommentById(commidId: number): Promise<CommentDto> {
     const comment = await this.prisma.comment.findUnique({
       where: { id: commidId },
@@ -36,6 +29,14 @@ export class CommentsService {
     }
 
     return comment;
+  }
+
+  async getPostComments(postId : number) {
+    const comments = this.prisma.comment.findMany({
+      where: {
+        postId
+      }
+    })
   }
 
   async createCommet(

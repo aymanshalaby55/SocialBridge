@@ -8,6 +8,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import { CommentDto } from './comment.dto';
+import { LikeDto } from './like.dto';
 
 @ObjectType()
 export class PostDto {
@@ -40,11 +41,4 @@ export class PostDto {
   @Field(() => Int)
   @IsNumber()
   userId: number;
-
-  // @Field(() => [CommentDto])
-  // comment: CommentDto[];
-
-  @Field(() => [Int])
-  @IsNumber({}, { each: true })
-  likeIDs: number[];
 }
