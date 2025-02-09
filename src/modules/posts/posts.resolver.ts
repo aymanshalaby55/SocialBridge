@@ -7,11 +7,16 @@ import { UseGuards } from '@nestjs/common';
 import { GetUser } from 'src/common/decorators/getUser.decorator';
 import { CommentsService } from '../comments/comments.service';
 import { CommentDto } from 'src/common/dto/comment.dto';
+import { LikeDto } from 'src/common/dto/like.dto';
+import { LikesService } from '../likes/likes.service';
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => PostDto)
 export class PostsResolver {
-  constructor(private readonly postsService: PostsService, private readonly commentService: CommentsService) { }
+  constructor(private readonly postsService: PostsService, 
+    private readonly commentService: CommentsService,
+    private readonly likesService: LikesService
+) { }
 
   @Mutation(() => PostDto)
   createPost(@Args('CreatePostInput') post: CreatePostInput, @GetUser() user) {
@@ -50,10 +55,15 @@ export class PostsResolver {
   }
 
   // this for getPostBy id
-  @ResolveField('comments', () => CommentDto , {nullable: true})
+  @ResolveField('comments', () => [CommentDto] , {nullable: true})
   getPostComments(@Parent() post) {
     return this.commentService.getPostComments(post.id);
   }
 
+
+  @ResolveField('likes', () => [LikeDto] , {nullable: true})
+  getpostsLike(@Parent() post) {
+    return this.likesService.getLikesByPost(post.id);
+  }
 
 }

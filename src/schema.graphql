@@ -7,10 +7,10 @@ type UserDto {
   email: String!
   name: String!
   password: String!
-  posts: PostDto!
-  friends: FriendDto!
-  likes: LikeDto!
-  comments: CommentDto!
+  posts: [PostDto!]
+  friends: [FriendDto!]
+  likes: [LikeDto!]
+  comments: [CommentDto!]
 }
 
 type PostDto {
@@ -20,7 +20,8 @@ type PostDto {
   imageUrl: String
   viewCount: Int
   userId: Int!
-  comments: CommentDto
+  comments: [CommentDto!]
+  likes: [LikeDto!]
 }
 
 type CommentDto {
@@ -38,14 +39,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type FriendDto {
-  id: ID!
-  userId: Int!
-  friendUserId: Int!
-  status: String!
-  createdAt: DateTime!
-}
-
 type LikeDto {
   id: ID!
   emoji: String
@@ -53,6 +46,14 @@ type LikeDto {
   updatedAt: DateTime
   userId: Int!
   postId: Int!
+}
+
+type FriendDto {
+  id: ID!
+  userId: Int!
+  friendUserId: Int!
+  status: String!
+  createdAt: DateTime!
 }
 
 type Query {

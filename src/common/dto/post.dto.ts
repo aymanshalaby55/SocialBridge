@@ -15,7 +15,7 @@ export class PostDto {
   @Field(() => Int)
   @IsNumber({ maxDecimalPlaces: 0 })
   @IsNotEmpty()
-  id: number;
+  id?: number;
 
   @Field()
   @IsString()

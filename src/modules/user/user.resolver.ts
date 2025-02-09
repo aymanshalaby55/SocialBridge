@@ -31,7 +31,7 @@ export class UserResolver {
     private readonly friendsService: FriendsService,
     private readonly likesService: LikesService,
     private readonly commentsService: CommentsService,
-  ) {}
+  ) { }
 
   @Query(() => UserDto)
   getUser(@Args('userId', { type: () => Int }) userId: number) {
@@ -47,7 +47,6 @@ export class UserResolver {
     return this.userService.updateUser(user.id, updates);
   }
 
-  // only for admin 
   @Query(() => [UserDto])
   getUsers() {
     return this.userService.getUsers();
@@ -59,22 +58,22 @@ export class UserResolver {
   }
 
   // resolved Fields
-  @ResolveField('posts' , ()=>PostDto)
+  @ResolveField('posts', () => [PostDto], { nullable: true })
   posts(@Parent() user: UserDto) {
     return this.postsService.getPostsByUser(user.id);
   }
 
-  @ResolveField('friends', () => FriendDto)
+  @ResolveField('friends', () => [FriendDto], { nullable: true })
   friends(@Parent() user: UserDto) {
     return this.friendsService.getUserFriends(user.id);
   }
 
-  @ResolveField('likes' , ()=> LikeDto)
+  @ResolveField('likes', () => [LikeDto], { nullable: true })
   likes(@Parent() user: UserDto) {
     return this.likesService.getLikesByUser(user.id);
   }
 
-  @ResolveField('comments', ()=>CommentDto)
+  @ResolveField('comments', () => [CommentDto], { nullable: true })
   comments(@Parent() user: UserDto) {
     console.log(user);
     return this.commentsService.findUserComments(user.id);
