@@ -21,6 +21,7 @@ import { CommentDto } from 'src/common/dto/comment.dto';
 import { FriendDto } from 'src/common/dto/friend.dto';
 import { LikeDto } from 'src/common/dto/like.dto';
 import { PostDto } from 'src/common/dto/post.dto';
+import { FileUpload, GraphQLUpload, Upload } from 'graphql-upload-ts';
 
 @Resolver(() => UserDto)
 @UseGuards(JwtAuthGuard)
@@ -33,9 +34,16 @@ export class UserResolver {
     private readonly commentsService: CommentsService,
   ) {}
 
+  @Mutation(() => UserDto)
+  async uploadUserProfile(
+    @Args('image', { type: () => GraphQLUpload }) image: FileUpload,
+    @GetUser() user,
+  ) {
+    // Assuming there's a method in the service to update the user's profile picture
+    await this.userService.updateUserProfilePicture(image, user.id);
+  }
   @Query(() => UserDto)
   getUser(@Args('userId', { type: () => Int }) userId: number) {
-    console.log('');
     return this.userService.getUserById(userId);
   }
 

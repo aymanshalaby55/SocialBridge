@@ -35,9 +35,9 @@ export class UserDto {
   @MinLength(8)
   password: string;
 
-  @Field(() => GraphQLUpload, { nullable: true })
+  @Field({ nullable: true })
   @IsOptional()
-  image?: FileUpload;
+  image?: string;
   // @Field(() => [PostDto], { nullable: true })
   // posts?: PostDto[];
 

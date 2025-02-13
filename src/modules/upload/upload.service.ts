@@ -60,4 +60,10 @@ export class UploadService {
       throw new BadRequestException(`File upload failed: ${error.message}`);
     }
   }
+
+  getLinkByKey(key: string) {
+    return `https://${this.configService.get(
+      'AWS_S3_BUCKET_NAME',
+    )}.s3.amazonaws.com/${key}`;
+  }
 }

@@ -2,10 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { UpdateUserInput } from './dto/updateUser.input';
 import { UserDto } from '../../common/dto/user.dto';
+import { FileUpload, Upload } from 'graphql-upload-ts';
+import { UploadService } from '../upload/upload.service';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly uploadService: UploadService,
+  ) {}
 
   async getUserById(id: number): Promise<UserDto> {
     const user = await this.prisma.user.findUnique({
@@ -26,6 +31,22 @@ export class UserService {
       where: { id },
       data,
     });
+  }
+
+  async updateUserProfilePicture(image: FileUpload, userId: number) {
+    const { key } = await this.uploadService.uploadFileToS3({
+      folderName: 'userImage',
+      file: image,
+    });
+
+    const imageUrl = this.uploadService.getLinkByKey(key);
+    const user = await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        image: imageUrl,
+      },
+    });
+    return user;
   }
 
   async deleteUser(id: number): Promise<boolean> {

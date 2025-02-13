@@ -7,15 +7,12 @@ type UserDto {
   email: String!
   name: String!
   password: String!
-  image: Upload
+  image: String
   posts: [PostDto!]
   friends: [FriendDto!]
   likes: [LikeDto!]
   comments: [CommentDto!]
 }
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
 
 type PostDto {
   id: Int!
@@ -27,6 +24,9 @@ type PostDto {
   comments: [CommentDto!]
   likes: [LikeDto!]
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 type CommentDto {
   id: ID!
@@ -82,6 +82,7 @@ type Mutation {
   updatePost(postId: Int!, UpdatePostInput: CreatePostInput!): PostDto!
   deletePost(postId: Int!): Boolean!
   getPostById(postId: Int!): PostDto!
+  uploadUserProfile(image: Upload!): UserDto!
   updateUserProfile(userProfileUpdates: UpdateUserInput!): UserDto!
   deleteUser: Boolean!
   createLike(likeInput: UserLikesInput!): LikeDto!
@@ -117,7 +118,7 @@ input CreatePostInput {
 input UpdateUserInput {
   name: String
   password: String
-  image: Upload
+  image: String
 }
 
 input UserLikesInput {

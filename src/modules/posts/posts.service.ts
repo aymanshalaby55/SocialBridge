@@ -29,11 +29,12 @@ export class PostsService {
       folderName: 'posts',
       file,
     });
+    const fileUrl = this.uploadService.getLinkByKey(key);
     const newPost = await this.prisma.post.create({
       data: {
         title: post.title,
         content: post.content,
-        file: key,
+        file: fileUrl,
         user: {
           connect: { id: userId },
         },
@@ -61,7 +62,6 @@ export class PostsService {
       data: {
         title: post.title,
         content: post.content,
-        // imageUrl: postImage,
       },
     });
 
