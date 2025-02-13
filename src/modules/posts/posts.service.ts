@@ -19,11 +19,13 @@ export class PostsService {
       throw new Error('User not found');
     }
 
+    // upload to aws-s3
+
     const newPost = await this.prisma.post.create({
       data: {
         title: post.title,
         content: post.content,
-        imageUrl: post.imageUrl,
+        // imageUrl: post.imageUrl,
         user: {
           connect: { id: userId },
         },
@@ -51,7 +53,7 @@ export class PostsService {
       data: {
         title: post.title,
         content: post.content,
-        imageUrl: post.imageUrl,
+        // imageUrl: postImage,
       },
     });
 

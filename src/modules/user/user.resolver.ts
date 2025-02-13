@@ -31,11 +31,11 @@ export class UserResolver {
     private readonly friendsService: FriendsService,
     private readonly likesService: LikesService,
     private readonly commentsService: CommentsService,
-  ) { }
+  ) {}
 
   @Query(() => UserDto)
   getUser(@Args('userId', { type: () => Int }) userId: number) {
-    console.log("");
+    console.log('');
     return this.userService.getUserById(userId);
   }
 

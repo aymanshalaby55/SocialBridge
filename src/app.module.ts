@@ -12,6 +12,7 @@ import { LikesModule } from './modules/likes/likes.module';
 import { CommentsModule } from './modules/comments/comments.module';
 import { FriendsModule } from './modules/friends/friends.module';
 import { AllServicesModule } from './common/providers/allServices.module';
+import { UploadModule } from './modules/upload/upload.module';
 
 @Global()
 @Module({
@@ -30,6 +31,7 @@ import { AllServicesModule } from './common/providers/allServices.module';
     CommentsModule,
     FriendsModule,
     AllServicesModule,
+    UploadModule,
   ],
   providers: [PrismaService],
   exports: [PrismaService],

@@ -19,14 +19,14 @@ export class FriendDto {
   @IsNotEmpty()
   friendUserId?: number;
 
-  @Field(() => String)
+  @Field(() => String, { defaultValue: FriendshipStatus.PENDING })
   @IsEnum(FriendshipStatus)
-  status: FriendshipStatus; // Changed to proper enum type
+  status: FriendshipStatus;
 
   @Field(() => Date)
   @IsNotEmpty()
   createdAt?: Date;
 
-  //   @Field(() => Date, { nullable: true })
-  //   updatedAt?: Date;
+  @Field(() => Date, { nullable: true })
+  updatedAt?: Date;
 }

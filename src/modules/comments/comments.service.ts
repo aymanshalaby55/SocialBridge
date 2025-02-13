@@ -12,7 +12,6 @@ import { UpdateCommentInput } from './dto/updateComment.input';
 export class CommentsService {
   constructor(private prisma: PrismaService) {}
 
-
   async findUserComments(userId: number): Promise<CommentDto[]> {
     return await this.prisma.comment.findMany({
       where: { userId },
@@ -31,12 +30,12 @@ export class CommentsService {
     return comment;
   }
 
-  async getPostComments(postId : number) {
+  async getPostComments(postId: number) {
     const comments = this.prisma.comment.findMany({
       where: {
-        postId
-      }
-    })
+        postId,
+      },
+    });
   }
 
   async createCommet(

@@ -7,17 +7,21 @@ type UserDto {
   email: String!
   name: String!
   password: String!
+  image: Upload
   posts: [PostDto!]
   friends: [FriendDto!]
   likes: [LikeDto!]
   comments: [CommentDto!]
 }
 
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
 type PostDto {
   id: Int!
   title: String!
   content: String!
-  imageUrl: String
+  image: Upload
   viewCount: Int
   userId: Int!
   comments: [CommentDto!]
@@ -54,6 +58,7 @@ type FriendDto {
   friendUserId: Int!
   status: String!
   createdAt: DateTime!
+  updatedAt: DateTime
 }
 
 type Query {
@@ -73,7 +78,8 @@ type Query {
 type Mutation {
   login(loginInput: LoginInput!): String!
   signup(signupInput: SignupInput!): String!
-  createPost(CreatePostInput: CreatePostInput!): PostDto!
+  uploadPostImage(file: Upload!): String!
+  createPost(CreatePostInput: CreatePostInput!, file: Upload!): PostDto!
   updatePost(postId: Int!, UpdatePostInput: CreatePostInput!): PostDto!
   deletePost(postId: Int!): Boolean!
   getPostById(postId: Int!): PostDto!
@@ -106,12 +112,13 @@ input SignupInput {
 input CreatePostInput {
   title: String!
   content: String!
-  imageUrl: String
+  image: Upload
 }
 
 input UpdateUserInput {
   name: String
   password: String
+  image: Upload
 }
 
 input UserLikesInput {

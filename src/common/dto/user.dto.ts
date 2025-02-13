@@ -4,12 +4,14 @@ import {
   MinLength,
   IsString,
   IsNumber,
+  IsOptional,
 } from 'class-validator';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { PostDto } from 'src/common/dto/post.dto';
 import { LikeDto } from 'src/common/dto/like.dto';
 import { CommentDto } from './comment.dto';
 import { FriendDto } from './friend.dto';
+import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
 
 @ObjectType()
 export class UserDto {
@@ -33,6 +35,9 @@ export class UserDto {
   @MinLength(8)
   password: string;
 
+  @Field(() => GraphQLUpload, { nullable: true })
+  @IsOptional()
+  image?: FileUpload;
   // @Field(() => [PostDto], { nullable: true })
   // posts?: PostDto[];
 

@@ -1,4 +1,12 @@
-import { Args, Int, Mutation, Resolver, Query, ResolveField, Parent } from '@nestjs/graphql';
+import {
+  Args,
+  Int,
+  Mutation,
+  Resolver,
+  Query,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { PostsService } from './posts.service';
 import { CreatePostInput } from './dto/createPost.input';
 import { PostDto } from '../../common/dto/post.dto';
@@ -9,17 +17,38 @@ import { CommentsService } from '../comments/comments.service';
 import { CommentDto } from 'src/common/dto/comment.dto';
 import { LikeDto } from 'src/common/dto/like.dto';
 import { LikesService } from '../likes/likes.service';
+import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
+import { UploadService } from '../upload/upload.service';
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => PostDto)
 export class PostsResolver {
-  constructor(private readonly postsService: PostsService, 
+  constructor(
+    private readonly postsService: PostsService,
     private readonly commentService: CommentsService,
-    private readonly likesService: LikesService
-) { }
+    private readonly likesService: LikesService,
+    private readonly uploadService: UploadService,
+  ) {}
+
+  @Mutation(() => String)
+  async uploadPostImage(
+    @Args('file', { type: () => GraphQLUpload }) file: FileUpload,
+  ) {
+    const result = await this.uploadService.uploadFileToS3({
+      folderName: 'posts-file',
+      file,
+    });
+
+    return result.key;
+  }
 
   @Mutation(() => PostDto)
-  createPost(@Args('CreatePostInput') post: CreatePostInput, @GetUser() user) {
+  createPost(
+    @Args('CreatePostInput') post: CreatePostInput,
+    @Args('file', { type: () => GraphQLUpload }) file: FileUpload,
+    @GetUser() user,
+  ) {
+    console.log(post);
     const data = this.postsService.createPost(user.id, post);
     return data;
   }
@@ -55,15 +84,13 @@ export class PostsResolver {
   }
 
   // this for getPostBy id
-  @ResolveField('comments', () => [CommentDto] , {nullable: true})
+  @ResolveField('comments', () => [CommentDto], { nullable: true })
   getPostComments(@Parent() post) {
     return this.commentService.getPostComments(post.id);
   }
 
-
-  @ResolveField('likes', () => [LikeDto] , {nullable: true})
+  @ResolveField('likes', () => [LikeDto], { nullable: true })
   getpostsLike(@Parent() post) {
     return this.likesService.getLikesByPost(post.id);
   }
-
 }

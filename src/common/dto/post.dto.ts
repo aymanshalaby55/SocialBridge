@@ -9,6 +9,11 @@ import {
 } from 'class-validator';
 import { CommentDto } from './comment.dto';
 import { LikeDto } from './like.dto';
+import {
+  FileUpload,
+  GraphQLUpload,
+  graphqlUploadExpress,
+} from 'graphql-upload-ts';
 
 @ObjectType()
 export class PostDto {
@@ -27,10 +32,10 @@ export class PostDto {
   @IsNotEmpty()
   content: string;
 
-  @Field({ nullable: true })
+  @Field(() => GraphQLUpload, { nullable: true })
   @IsUrl()
   @IsOptional()
-  imageUrl?: string;
+  image?: FileUpload;
 
   @Field(() => Int, { nullable: true })
   @IsNumber()
