@@ -27,20 +27,7 @@ export class PostsResolver {
     private readonly postsService: PostsService,
     private readonly commentService: CommentsService,
     private readonly likesService: LikesService,
-    private readonly uploadService: UploadService,
   ) {}
-
-  @Mutation(() => String)
-  async uploadPostImage(
-    @Args('file', { type: () => GraphQLUpload }) file: FileUpload,
-  ) {
-    const result = await this.uploadService.uploadFileToS3({
-      folderName: 'posts-file',
-      file,
-    });
-
-    return result.key;
-  }
 
   @Mutation(() => PostDto)
   createPost(
@@ -48,8 +35,8 @@ export class PostsResolver {
     @Args('file', { type: () => GraphQLUpload }) file: FileUpload,
     @GetUser() user,
   ) {
-    console.log(post);
-    const data = this.postsService.createPost(user.id, post);
+    console.log(file);
+    const data = this.postsService.createPost(user.id, post, file);
     return data;
   }
 

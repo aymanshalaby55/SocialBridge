@@ -78,7 +78,6 @@ type Query {
 type Mutation {
   login(loginInput: LoginInput!): String!
   signup(signupInput: SignupInput!): String!
-  uploadPostImage(file: Upload!): String!
   createPost(CreatePostInput: CreatePostInput!, file: Upload!): PostDto!
   updatePost(postId: Int!, UpdatePostInput: CreatePostInput!): PostDto!
   deletePost(postId: Int!): Boolean!

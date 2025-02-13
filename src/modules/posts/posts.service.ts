@@ -1,12 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { CreatePostInput } from './dto/createPost.input';
+import { FileUpload, Upload } from 'graphql-upload-ts';
+import { UploadService } from '../upload/upload.service';
 
 @Injectable()
 export class PostsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly uploadService: UploadService,
+  ) {}
 
-  async createPost(userId: number, post: CreatePostInput) {
+  async createPost(userId: number, post: CreatePostInput, file: FileUpload) {
     if (!userId || !post) {
       throw new Error('User ID and data are required');
     }
@@ -20,12 +25,15 @@ export class PostsService {
     }
 
     // upload to aws-s3
-
+    const { key } = await this.uploadService.uploadFileToS3({
+      folderName: 'posts',
+      file,
+    });
     const newPost = await this.prisma.post.create({
       data: {
         title: post.title,
         content: post.content,
-        // imageUrl: post.imageUrl,
+        file: key,
         user: {
           connect: { id: userId },
         },

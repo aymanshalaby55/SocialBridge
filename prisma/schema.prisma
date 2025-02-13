@@ -18,7 +18,9 @@ model User {
   email    String @unique
   name     String
   password String
+  image    String @default("")
 
+  // relations 
   posts          Post[]
   Like           Like[]
   Comment        Comment[]
@@ -36,7 +38,7 @@ model Post {
   updatedAt DateTime @updatedAt
 
   // Optional fields
-  imageUrl String?
+  file String @default("")
 
   // Metrics
   viewCount Int @default(0)
