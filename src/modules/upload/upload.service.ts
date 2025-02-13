@@ -1,8 +1,9 @@
-import { PutObjectCommand, S3 } from '@aws-sdk/client-s3';
+import { S3 } from '@aws-sdk/client-s3';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { FileUpload } from 'graphql-upload-ts';
-import * as fs from 'fs';
+import { Upload } from '@aws-sdk/lib-storage';
+import * as path from 'path';
 
 @Injectable()
 export class UploadService {
@@ -28,31 +29,34 @@ export class UploadService {
     folderName: string;
     file: FileUpload;
   }) {
-    const key = `${folderName}/${file.filename}`;
+    const key = `${folderName}/${new Date().toISOString()}_${path.basename(
+      file.filename,
+    )}`.replace(/ /g, '');
 
-    // use another libaray for this...
-    const fileBuffer = await new Promise<Buffer>((resolve, reject) => {
-      const chunks: Buffer[] = [];
-      const stream = file.createReadStream();
+    //? use another libaray for this...
+    // const fileBuffer = await new Promise<Buffer>((resolve, reject) => {
+    //   const chunks: Buffer[] = [];
+    //   const stream = file.createReadStream();
 
-      stream.on('data', (chunk) => chunks.push(chunk));
-      stream.on('end', () => resolve(Buffer.concat(chunks)));
-      stream.on('error', reject);
-    });
+    //   stream.on('data', (chunk) => chunks.push(chunk));
+    //   stream.on('end', () => resolve(Buffer.concat(chunks)));
+    //   stream.on('error', reject);
+    // });
 
     try {
-      await this.awsS3.send(
-        new PutObjectCommand({
+      const upload = new Upload({
+        client: this.awsS3,
+        params: {
           Bucket: this.S3_BUCKET_NAME,
           Key: key,
-          Body: fileBuffer,
+          Body: file.createReadStream(),
           ContentType: file.mimetype,
-        }),
-      );
+        },
+      });
 
+      await upload.done();
       return { key };
     } catch (error) {
-      console.error(error);
       throw new BadRequestException(`File upload failed: ${error.message}`);
     }
   }
