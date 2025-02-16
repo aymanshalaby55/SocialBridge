@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { UpdateUserInput } from './dto/updateUser.input';
 import { UserDto } from '../../common/dto/user.dto';
@@ -18,7 +18,7 @@ export class UserService {
     });
 
     if (!user) {
-      throw new Error('User not found');
+      throw new ForbiddenException('User not found');
     }
     return user;
   }

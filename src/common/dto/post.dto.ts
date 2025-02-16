@@ -32,10 +32,10 @@ export class PostDto {
   @IsNotEmpty()
   content: string;
 
-  @Field(() => GraphQLUpload, { nullable: true })
+  @Field(() => String, { nullable: true })
   @IsUrl()
   @IsOptional()
-  image?: FileUpload;
+  file?: string;
 
   @Field(() => Int, { nullable: true })
   @IsNumber()

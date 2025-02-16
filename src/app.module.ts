@@ -1,5 +1,5 @@
 import { Global, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import * as depthLimit from 'graphql-depth-limit';
@@ -13,7 +13,11 @@ import { CommentsModule } from './modules/comments/comments.module';
 import { FriendsModule } from './modules/friends/friends.module';
 import { AllServicesModule } from './common/providers/allServices.module';
 import { UploadModule } from './modules/upload/upload.module';
-
+import { CACHE_MANAGER, CacheModule } from '@nestjs/cache-manager';
+import KeyvRedis from '@keyv/redis';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { GraphQLCacheInterceptor } from './cache.interceptor';
+//
 @Global()
 @Module({
   imports: [
@@ -24,6 +28,15 @@ import { UploadModule } from './modules/upload/upload.module';
       context: ({ req, res }) => ({ req, res }),
       validationRules: [depthLimit(3)],
     }),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        ttl: configService.getOrThrow<number>('CACHE_TTL'),
+        stores: new KeyvRedis(configService.getOrThrow<string>('REDIS_SERVER')),
+      }),
+      inject: [ConfigService],
+    }),
     AuthModule,
     PostsModule,
     UserModule,
@@ -33,7 +46,14 @@ import { UploadModule } from './modules/upload/upload.module';
     AllServicesModule,
     UploadModule,
   ],
-  providers: [PrismaService],
+
+  providers: [
+    PrismaService,
+    {
+      provide: 'GRAPHQL_CACHE_INTERCEPTOR',
+      useClass: GraphQLCacheInterceptor,
+    },
+  ],
   exports: [PrismaService],
 })
 export class AppModule {}

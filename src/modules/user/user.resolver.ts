@@ -11,7 +11,7 @@ import { UserService } from './user.service';
 import { UpdateUserInput } from './dto/updateUser.input';
 import { GetUser } from 'src/common/decorators/getUser.decorator';
 import { UserDto } from 'src/common/dto/user.dto';
-import { Inject, UseGuards } from '@nestjs/common';
+import { Inject, UseGuards, UseInterceptors } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt.guard';
 import { PostsService } from 'src/modules/posts/posts.service';
 import { FriendsService } from '../friends/friends.service';
@@ -21,10 +21,14 @@ import { CommentDto } from 'src/common/dto/comment.dto';
 import { FriendDto } from 'src/common/dto/friend.dto';
 import { LikeDto } from 'src/common/dto/like.dto';
 import { PostDto } from 'src/common/dto/post.dto';
-import { FileUpload, GraphQLUpload, Upload } from 'graphql-upload-ts';
+import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { GraphQLCacheInterceptor } from '../../cache.interceptor';
 
 @Resolver(() => UserDto)
 @UseGuards(JwtAuthGuard)
+@UseInterceptors(GraphQLCacheInterceptor)
 export class UserResolver {
   constructor(
     private readonly userService: UserService,
@@ -32,6 +36,7 @@ export class UserResolver {
     private readonly friendsService: FriendsService,
     private readonly likesService: LikesService,
     private readonly commentsService: CommentsService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   @Mutation(() => UserDto)
@@ -42,7 +47,9 @@ export class UserResolver {
     // Assuming there's a method in the service to update the user's profile picture
     await this.userService.updateUserProfilePicture(image, user.id);
   }
+
   @Query(() => UserDto)
+  @UseInterceptors(GraphQLCacheInterceptor)
   getUser(@Args('userId', { type: () => Int }) userId: number) {
     return this.userService.getUserById(userId);
   }
@@ -54,7 +61,7 @@ export class UserResolver {
   ) {
     return this.userService.updateUser(user.id, updates);
   }
-
+  // make this only for admin.
   @Query(() => [UserDto])
   getUsers() {
     return this.userService.getUsers();

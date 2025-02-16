@@ -5,6 +5,7 @@ import { PostsService } from '../posts/posts.service';
 import { FriendsService } from '../friends/friends.service';
 import { LikesService } from '../likes/likes.service';
 import { CommentsService } from '../comments/comments.service';
+import { GraphQLCacheInterceptor } from 'src/cache.interceptor';
 
 @Module({
   providers: [

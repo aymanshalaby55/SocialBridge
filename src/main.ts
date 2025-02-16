@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
-import { AllExceptionsFilter } from './common/exceptions/allException.filter';
 import { ValidationPipe } from '@nestjs/common';
 import { graphqlUploadExpress } from 'graphql-upload-ts';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
@@ -15,13 +14,14 @@ async function bootstrap() {
 
   // upload middleware
   app.use(
+    '/graphql',
     graphqlUploadExpress({
       maxFileSize: 1000000,
-      maxFiles: 1,
+      maxFiles: 5,
       overrideSendResponse: false, // This is necessary for nest.js
     }),
   );
-  app.useGlobalFilters(new AllExceptionsFilter());
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

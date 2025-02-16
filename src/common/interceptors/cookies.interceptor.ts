@@ -5,7 +5,6 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
-import { Response } from 'express';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
@@ -14,7 +13,6 @@ export class CookiesInterceptor implements NestInterceptor {
     const ctx = GqlExecutionContext.create(context);
     const { res: response } = ctx.getContext();
 
-    console.log(response);
     if (!response) {
       throw new Error('Response object not found in context');
     }
