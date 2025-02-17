@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from '../../prisma.service';
 import { UpdateUserInput } from './dto/updateUser.input';
 import { UserDto } from '../../common/dto/user.dto';
 import { FileUpload, Upload } from 'graphql-upload-ts';

@@ -3,8 +3,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
-import { FriendDto } from 'src/common/dto/friend.dto';
+import { PrismaService } from '../../prisma.service';
+import { FriendDto } from '../../common/dto/friend.dto';
 
 @Injectable()
 export class FriendsService {

@@ -7,10 +7,10 @@ import {
   ResolveField,
 } from '@nestjs/graphql';
 import { LikesService } from './likes.service';
-import { LikeDto } from 'src/common/dto/like.dto';
-import { JwtAuthGuard } from 'src/modules/auth/guards/jwt.guard';
+import { LikeDto } from '../../common/dto/like.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { UseGuards } from '@nestjs/common';
-import { GetUser } from 'src/common/decorators/getUser.decorator';
+import { GetUser } from '../../common/decorators/getUser.decorator';
 import { UserLikesInput } from './dto/userLikes.dto.input';
 
 @UseGuards(JwtAuthGuard)

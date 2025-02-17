@@ -10,15 +10,14 @@ import {
 import { PostsService } from './posts.service';
 import { CreatePostInput } from './dto/createPost.input';
 import { PostDto } from '../../common/dto/post.dto';
-import { JwtAuthGuard } from 'src/modules/auth/guards/jwt.guard';
+import { JwtAuthGuard } from '../../modules/auth/guards/jwt.guard';
 import { UseGuards } from '@nestjs/common';
-import { GetUser } from 'src/common/decorators/getUser.decorator';
+import { GetUser } from '../../common/decorators/getUser.decorator';
 import { CommentsService } from '../comments/comments.service';
-import { CommentDto } from 'src/common/dto/comment.dto';
-import { LikeDto } from 'src/common/dto/like.dto';
+import { CommentDto } from '../../common/dto/comment.dto';
+import { LikeDto } from '../../common/dto/like.dto';
 import { LikesService } from '../likes/likes.service';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
-import { UploadService } from '../upload/upload.service';
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => PostDto)

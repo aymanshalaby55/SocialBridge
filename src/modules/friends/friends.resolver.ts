@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { FriendsService } from './friends.service';
-import { FriendDto } from 'src/common/dto/friend.dto';
+import { FriendDto } from '../../common/dto/friend.dto';
 import { FriendRequestInput } from './dto/friendRequest.input';
-import { GetUser } from 'src/common/decorators/getUser.decorator';
+import { GetUser } from '../../common/decorators/getUser.decorator';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 

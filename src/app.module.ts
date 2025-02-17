@@ -16,7 +16,7 @@ import { UploadModule } from './modules/upload/upload.module';
 import { CACHE_MANAGER, CacheModule } from '@nestjs/cache-manager';
 import KeyvRedis from '@keyv/redis';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { GraphQLCacheInterceptor } from './cache.interceptor';
+import { GraphQLCacheInterceptor } from './common/interceptors/cache.interceptor';
 //
 @Global()
 @Module({

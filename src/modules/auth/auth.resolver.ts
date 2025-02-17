@@ -7,8 +7,7 @@ import { LoginInput } from './dto/login.input';
 import { SignupInput } from './dto/signup.input';
 import { UserDto } from '../../common/dto/user.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
-import { GetUser } from 'src/common/decorators/getUser.decorator';
-import { CookiesInterceptor } from 'src/common/interceptors/cookies.interceptor';
+import { GetUser } from '../../common/decorators/getUser.decorator';
 
 @Resolver(() => UserDto)
 export class AuthResolver {

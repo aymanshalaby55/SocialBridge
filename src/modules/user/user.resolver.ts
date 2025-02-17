@@ -9,22 +9,22 @@ import {
 } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { UpdateUserInput } from './dto/updateUser.input';
-import { GetUser } from 'src/common/decorators/getUser.decorator';
-import { UserDto } from 'src/common/dto/user.dto';
+import { GetUser } from '../../common/decorators/getUser.decorator';
+import { UserDto } from '../../common/dto/user.dto';
 import { Inject, UseGuards, UseInterceptors } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/modules/auth/guards/jwt.guard';
-import { PostsService } from 'src/modules/posts/posts.service';
+import { JwtAuthGuard } from '../../modules/auth/guards/jwt.guard';
+import { PostsService } from '../../modules/posts/posts.service';
 import { FriendsService } from '../friends/friends.service';
 import { LikesService } from '../likes/likes.service';
 import { CommentsService } from '../comments/comments.service';
-import { CommentDto } from 'src/common/dto/comment.dto';
-import { FriendDto } from 'src/common/dto/friend.dto';
-import { LikeDto } from 'src/common/dto/like.dto';
-import { PostDto } from 'src/common/dto/post.dto';
+import { CommentDto } from '../../common/dto/comment.dto';
+import { FriendDto } from '../../common/dto/friend.dto';
+import { LikeDto } from '../../common/dto/like.dto';
+import { PostDto } from '../../common/dto/post.dto';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { GraphQLCacheInterceptor } from '../../cache.interceptor';
+import { GraphQLCacheInterceptor } from '../../common/interceptors/cache.interceptor';
 
 @Resolver(() => UserDto)
 @UseGuards(JwtAuthGuard)
