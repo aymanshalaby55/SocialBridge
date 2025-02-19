@@ -2,24 +2,33 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { UpdateUserInput } from './dto/updateUser.input';
 import { UserDto } from '../../common/dto/user.dto';
-import { FileUpload, Upload } from 'graphql-upload-ts';
+import { FileUpload } from 'graphql-upload-ts';
 import { UploadService } from '../upload/upload.service';
+import { PubSub } from 'graphql-subscriptions';
 
 @Injectable()
 export class UserService {
+  private pubsub: PubSub;
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly uploadService: UploadService,
-  ) {}
+  ) {
+    this.pubsub = new PubSub();
+  }
 
   async getUserById(id: number): Promise<UserDto> {
     const user = await this.prisma.user.findUnique({
       where: { id },
     });
+    console.log('hello');
 
     if (!user) {
       throw new ForbiddenException('User not found');
     }
+
+    this.pubsub.publish('new_post', { message: 'hello world' });
+
     return user;
   }
 

@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import * as depthLimit from 'graphql-depth-limit';
-
+import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './prisma.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { PostsModule } from './modules/posts/posts.module';
@@ -17,17 +17,21 @@ import { CacheModule } from '@nestjs/cache-manager';
 import KeyvRedis from '@keyv/redis';
 import { GraphQLCacheInterceptor } from './common/interceptors/cache.interceptor';
 import { NotificationsModule } from './modules/notifications/notifications.module';
-//
+import { PubSub } from 'graphql-subscriptions';
+import { pubSubProvider } from './common/providers/pubSub.provider';
+
 @Global()
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
+      autoSchemaFile: 'src/schema.graphql',
+      installSubscriptionHandlers: true,
+      sortSchema: true,
       subscriptions: {
         'graphql-ws': true,
       },
-      autoSchemaFile: 'src/schema.graphql',
       context: ({ req, res }) => ({ req, res }),
       validationRules: [depthLimit(3)],
     }),
@@ -50,13 +54,13 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
     UploadModule,
     NotificationsModule,
   ],
-
   providers: [
     PrismaService,
-    {
-      provide: 'GRAPHQL_CACHE_INTERCEPTOR',
-      useClass: GraphQLCacheInterceptor,
-    },
+    pubSubProvider,
+    // {
+    //   provide: 'GRAPHQL_CACHE_INTERC EPTOR',
+    //   useClass: GraphQLCacheInterceptor,
+    // },
   ],
   exports: [PrismaService],
 })

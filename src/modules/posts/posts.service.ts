@@ -3,6 +3,7 @@ import { PrismaService } from '../../prisma.service';
 import { CreatePostInput } from './dto/createPost.input';
 import { FileUpload, Upload } from 'graphql-upload-ts';
 import { UploadService } from '../upload/upload.service';
+import { PubSub } from 'graphql-subscriptions';
 
 @Injectable()
 export class PostsService {

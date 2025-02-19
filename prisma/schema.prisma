@@ -24,8 +24,9 @@ model User {
   posts          Post[]
   Like           Like[]
   Comment        Comment[]
-  UserFriends    Friends[] @relation("UserFriends")
-  FriendsRequest Friends[] @relation("requestFriend")
+  UserFriends    Friends[]      @relation("UserFriends")
+  FriendsRequest Friends[]      @relation("requestFriend")
+  notifications  Notification[]
 }
 
 model Post {
@@ -111,4 +112,19 @@ model Friends {
 
   @@unique([userId, friendUserId])
   @@map("friends")
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  message   String
+  type      String // Type of notification (e.g., "like", "comment", "friend_request")
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@map("notifications")
 }

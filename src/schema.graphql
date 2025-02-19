@@ -2,127 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type UserDto {
-  id: ID!
-  email: String!
-  name: String!
-  password: String!
-  image: String
-  posts: [PostDto!]
-  friends: [FriendDto!]
-  likes: [LikeDto!]
-  comments: [CommentDto!]
-}
-
-type PostDto {
-  id: Int!
-  title: String!
-  content: String!
-  file: String
-  viewCount: Int
-  userId: Int!
-  comments: [CommentDto!]
-  likes: [LikeDto!]
-}
-
 type CommentDto {
-  id: ID!
   content: String!
   createdAt: DateTime!
   editedAt: DateTime
+  id: ID!
   isEdited: Boolean
-  userId: Float!
   postId: Float!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type LikeDto {
-  id: ID!
-  emoji: String
-  createdAt: DateTime!
-  updatedAt: DateTime
-  userId: Int!
-  postId: Int!
-}
-
-type FriendDto {
-  id: ID!
-  userId: Int!
-  friendUserId: Int!
-  status: String!
-  createdAt: DateTime!
-  updatedAt: DateTime
-}
-
-type Query {
-  healthCheck: String!
-  protectedRoute: String!
-  getPostsByUser: [PostDto!]!
-  getUser(userId: Int!): UserDto!
-  getUsers: [UserDto!]!
-  getLikesByPost(postId: Int!): [LikeDto!]!
-  getLikesByUser: [LikeDto!]!
-  getLikeById(likeId: Int!): LikeDto!
-  comments(userId: Int!): [CommentDto!]!
-  comment(id: Int!): CommentDto!
-  getUserFriends: [FriendDto!]!
-}
-
-type Mutation {
-  login(loginInput: LoginInput!): String!
-  signup(signupInput: SignupInput!): String!
-  createPost(CreatePostInput: CreatePostInput!, file: Upload!): PostDto!
-  updatePost(postId: Int!, UpdatePostInput: CreatePostInput!): PostDto!
-  deletePost(postId: Int!): Boolean!
-  getPostById(postId: Int!): PostDto!
-  uploadUserProfile(image: Upload!): UserDto!
-  updateUserProfile(userProfileUpdates: UpdateUserInput!): UserDto!
-  deleteUser: Boolean!
-  createLike(likeInput: UserLikesInput!): LikeDto!
-  updateLikeEmoji(likeInput: UserLikesInput!): LikeDto!
-  deleteLike(likeId: Int!): LikeDto!
-  deleteLikeByUserAndPost(postId: Int!): LikeDto!
-  createComment(createCommentInput: CreateCommentInput!): CommentDto!
-  updateComment(updateCommentInput: UpdateCommentInput!): CommentDto!
-  deleteComment(id: Int!): Boolean!
-  addFriend(targetId: Int!): FriendDto!
-  rejectFriendRequest(friendId: Int!): FriendDto!
-  acceptFriendRequest(friendId: Int!): FriendDto!
-}
-
-input LoginInput {
-  email: String!
-  password: String!
-}
-
-input SignupInput {
-  email: String!
-  password: String!
-  confirmPassword: String!
-  name: String!
-}
-
-input CreatePostInput {
-  title: String!
-  content: String!
-}
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
-
-input UpdateUserInput {
-  name: String
-  password: String
-  image: String
-}
-
-input UserLikesInput {
-  postId: Int!
-  emoji: String
+  userId: Float!
 }
 
 input CreateCommentInput {
@@ -130,8 +17,125 @@ input CreateCommentInput {
   postId: Int!
 }
 
+input CreatePostInput {
+  content: String!
+  title: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type FriendDto {
+  createdAt: DateTime!
+  friendUserId: Int!
+  id: ID!
+  status: String!
+  updatedAt: DateTime
+  userId: Int!
+}
+
+type LikeDto {
+  createdAt: DateTime!
+  emoji: String
+  id: ID!
+  postId: Int!
+  updatedAt: DateTime
+  userId: Int!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  acceptFriendRequest(friendId: Int!): FriendDto!
+  addFriend(targetId: Int!): FriendDto!
+  createComment(createCommentInput: CreateCommentInput!): CommentDto!
+  createLike(likeInput: UserLikesInput!): LikeDto!
+  createPost(CreatePostInput: CreatePostInput!, file: Upload!): PostDto!
+  deleteComment(id: Int!): Boolean!
+  deleteLike(likeId: Int!): LikeDto!
+  deleteLikeByUserAndPost(postId: Int!): LikeDto!
+  deletePost(postId: Int!): Boolean!
+  deleteUser: Boolean!
+  getPostById(postId: Int!): PostDto!
+  login(loginInput: LoginInput!): String!
+  rejectFriendRequest(friendId: Int!): FriendDto!
+  signup(signupInput: SignupInput!): String!
+  updateComment(updateCommentInput: UpdateCommentInput!): CommentDto!
+  updateLikeEmoji(likeInput: UserLikesInput!): LikeDto!
+  updatePost(UpdatePostInput: CreatePostInput!, postId: Int!): PostDto!
+  updateUserProfile(userProfileUpdates: UpdateUserInput!): UserDto!
+  uploadUserProfile(image: Upload!): UserDto!
+}
+
+type PostDto {
+  comments: [CommentDto!]
+  content: String!
+  file: String
+  id: Int!
+  likes: [LikeDto!]
+  title: String!
+  userId: Int!
+  viewCount: Int
+}
+
+type Query {
+  comment(id: Int!): CommentDto!
+  comments(userId: Int!): [CommentDto!]!
+  getLikeById(likeId: Int!): LikeDto!
+  getLikesByPost(postId: Int!): [LikeDto!]!
+  getLikesByUser: [LikeDto!]!
+  getPostsByUser: [PostDto!]!
+  getUser(userId: Int!): UserDto!
+  getUserFriends: [FriendDto!]!
+  getUsers: [UserDto!]!
+  healthCheck: String!
+  protectedRoute: String!
+}
+
+input SignupInput {
+  confirmPassword: String!
+  email: String!
+  name: String!
+  password: String!
+}
+
+type Subscription {
+  new_post: String!
+}
+
 input UpdateCommentInput {
+  commentId: Int
   content: String!
   postId: Int!
-  commentId: Int
+}
+
+input UpdateUserInput {
+  image: String
+  name: String
+  password: String
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+type UserDto {
+  comments: [CommentDto!]
+  email: String!
+  friends: [FriendDto!]
+  id: ID!
+  image: String
+  likes: [LikeDto!]
+  name: String!
+  password: String!
+  posts: [PostDto!]
+}
+
+input UserLikesInput {
+  emoji: String
+  postId: Int!
 }

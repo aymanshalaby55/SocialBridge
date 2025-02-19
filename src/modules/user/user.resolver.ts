@@ -6,6 +6,7 @@ import {
   Int,
   ResolveField,
   Parent,
+  Subscription,
 } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { UpdateUserInput } from './dto/updateUser.input';
@@ -25,10 +26,11 @@ import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { GraphQLCacheInterceptor } from '../../common/interceptors/cache.interceptor';
+import { PubSub } from 'graphql-subscriptions';
 
 @Resolver(() => UserDto)
-@UseGuards(JwtAuthGuard)
-@UseInterceptors(GraphQLCacheInterceptor)
+// @UseGuards(JwtAuthGuard)
+// @UseInterceptors(GraphQLCacheInterceptor)
 export class UserResolver {
   constructor(
     private readonly userService: UserService,
@@ -37,6 +39,7 @@ export class UserResolver {
     private readonly likesService: LikesService,
     private readonly commentsService: CommentsService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    @Inject('PUB_SUB') private readonly pubSub,
   ) {}
 
   @Mutation(() => UserDto)
@@ -49,8 +52,9 @@ export class UserResolver {
   }
 
   @Query(() => UserDto)
-  @UseInterceptors(GraphQLCacheInterceptor)
+  // @UseInterceptors(GraphQLCacheInterceptor)
   getUser(@Args('userId', { type: () => Int }) userId: number) {
+    this.pubSub.publish('new_post', { message: 'hellp' });
     return this.userService.getUserById(userId);
   }
 
