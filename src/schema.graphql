@@ -63,6 +63,7 @@ type Mutation {
   deleteUser: Boolean!
   getPostById(postId: Int!): PostDto!
   login(loginInput: LoginInput!): String!
+  markNotificationAsRead(id: Float!): NotificationDto!
   rejectFriendRequest(friendId: Int!): FriendDto!
   signup(signupInput: SignupInput!): String!
   updateComment(updateCommentInput: UpdateCommentInput!): CommentDto!
@@ -70,6 +71,16 @@ type Mutation {
   updatePost(UpdatePostInput: CreatePostInput!, postId: Int!): PostDto!
   updateUserProfile(userProfileUpdates: UpdateUserInput!): UserDto!
   uploadUserProfile(image: Upload!): UserDto!
+}
+
+type NotificationDto {
+  createdAt: DateTime!
+  id: Int!
+  isRead: Boolean!
+  message: String!
+  type: String!
+  updatedAt: DateTime!
+  userId: Int!
 }
 
 type PostDto {
@@ -92,6 +103,7 @@ type Query {
   getPostsByUser: [PostDto!]!
   getUser(userId: Int!): UserDto!
   getUserFriends: [FriendDto!]!
+  getUserNotifications(userId: Float!): [NotificationDto!]!
   getUsers: [UserDto!]!
   healthCheck: String!
   protectedRoute: String!
@@ -105,7 +117,7 @@ input SignupInput {
 }
 
 type Subscription {
-  new_post: String!
+  newNotification: String!
 }
 
 input UpdateCommentInput {

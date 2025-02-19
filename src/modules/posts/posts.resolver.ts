@@ -20,20 +20,15 @@ import { LikeDto } from '../../common/dto/like.dto';
 import { LikesService } from '../likes/likes.service';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
 import { PubSub } from 'graphql-subscriptions';
-import { WorkLink } from 'aws-sdk';
-import { concat } from 'rxjs';
 
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @Resolver(() => PostDto)
 export class PostsResolver {
-  pubsub: PubSub;
   constructor(
     private readonly postsService: PostsService,
     private readonly commentService: CommentsService,
     private readonly likesService: LikesService,
-  ) {
-    this.pubsub = new PubSub();
-  }
+  ) {}
 
   @Mutation(() => PostDto)
   createPost(

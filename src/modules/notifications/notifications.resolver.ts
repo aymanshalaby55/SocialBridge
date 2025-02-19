@@ -1,8 +1,17 @@
-import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
+import {
+  Args,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  Subscription,
+} from '@nestjs/graphql';
 import { NotificationsService } from './notifications.service';
 import { Inject, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { PubSub } from 'graphql-subscriptions';
+import { GetUser } from 'src/common/decorators/getUser.decorator';
+import { NotificationDto } from './dto/notification.dto';
 
 @Resolver('Notification')
 export class NotificationsResolver {
@@ -11,35 +20,38 @@ export class NotificationsResolver {
     @Inject('PUB_SUB') private readonly pubSub: PubSub,
   ) {}
 
+  @UseGuards(JwtAuthGuard)
   @Subscription(() => String, {
-    name: 'new_post',
-    resolve: (payload) => {
-      if (!payload || !payload.message) {
-        throw new Error('Invalid payload: message is missing');
+    name: 'newNotification',
+    resolve: async function (payload) {
+      if (!payload || !payload.data) {
+        throw new Error('Invalid payload: data is missing');
       }
-      return payload.message;
+
+      // Create notification in database
+      const notification = await this.notificationService.createNotification(
+        payload.recipientId,
+        payload.data,
+        payload.type || 'GENERAL',
+      );
+
+      return notification;
+    },
+    filter: (payload, variables) => {
+      return payload.recipientId === variables.user.userId;
     },
   })
-  async new_post() {
-    const data = await this.pubSub.subscribe('new_post', (payload) => {
-      if (!payload) {
-        throw new Error('No payload received');
-      }
-      return payload;
-    });
-
-    console.log(data);
-
-    // Ensure the asyncIterableIterator is correctly set up
-    return this.pubSub.asyncIterableIterator('new_post');
+  notifyUser(@GetUser() user) {
+    return this.pubSub.asyncIterableIterator('New_Notification');
   }
-  //   @Query(() => [Notification])
-  //   getUserNotifications(@Args('userId') userId: number) {
-  //     return this.notificationService.getUserNotifications(userId);
-  //   }
 
-  //   @Mutation(() => Notification)
-  //   markNotificationAsRead(@Args('id') id: number) {
-  //     return this.notificationService.markNotificationAsRead(id);
-  //   }
+  @Query(() => [NotificationDto])
+  getUserNotifications(@Args('userId') userId: number) {
+    return this.notificationService.getUserNotifications(userId);
+  }
+
+  @Mutation(() => NotificationDto)
+  markNotificationAsRead(@Args('id') id: number) {
+    return this.notificationService.markNotificationAsRead(id);
+  }
 }
