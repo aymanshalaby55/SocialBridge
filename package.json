@@ -47,6 +47,7 @@
     "graphql-depth-limit": "^1.1.0",
     "graphql-upload": "^17.0.0",
     "graphql-upload-ts": "^2.1.2",
+    "graphql-ws": "^6.0.4",
     "keyv": "^5.2.3",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",

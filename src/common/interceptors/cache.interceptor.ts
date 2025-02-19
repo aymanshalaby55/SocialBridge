@@ -23,6 +23,7 @@ export class GraphQLCacheInterceptor implements NestInterceptor {
     // Get the actual GraphQL query document
     const queryDocument = print(info.operation);
 
+    console.log(queryDocument);
     const key = `graphql:${Buffer.from(queryDocument).toString('base64')}`;
 
     return key;

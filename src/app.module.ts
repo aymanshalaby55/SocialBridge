@@ -13,10 +13,10 @@ import { CommentsModule } from './modules/comments/comments.module';
 import { FriendsModule } from './modules/friends/friends.module';
 import { AllServicesModule } from './common/providers/allServices.module';
 import { UploadModule } from './modules/upload/upload.module';
-import { CACHE_MANAGER, CacheModule } from '@nestjs/cache-manager';
+import { CacheModule } from '@nestjs/cache-manager';
 import KeyvRedis from '@keyv/redis';
-import { APP_INTERCEPTOR } from '@nestjs/core';
 import { GraphQLCacheInterceptor } from './common/interceptors/cache.interceptor';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 //
 @Global()
 @Module({
@@ -24,6 +24,9 @@ import { GraphQLCacheInterceptor } from './common/interceptors/cache.interceptor
     ConfigModule.forRoot({ isGlobal: true }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
+      subscriptions: {
+        'graphql-ws': true,
+      },
       autoSchemaFile: 'src/schema.graphql',
       context: ({ req, res }) => ({ req, res }),
       validationRules: [depthLimit(3)],
@@ -45,6 +48,7 @@ import { GraphQLCacheInterceptor } from './common/interceptors/cache.interceptor
     FriendsModule,
     AllServicesModule,
     UploadModule,
+    NotificationsModule,
   ],
 
   providers: [
