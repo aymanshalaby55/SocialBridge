@@ -22,9 +22,6 @@ jobs:
       - name: Install dependencies
         run: npm i
 
-      - name: Install Prisma
-        run: npm install -g prisma
-
       - name: Generate Prisma Client
         run: npx prisma generate
 
