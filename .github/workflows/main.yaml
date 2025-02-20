@@ -19,8 +19,14 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: install deps
+      - name: Install dependencies
         run: npm i
 
-      - name: build
+      - name: Install Prisma
+        run: npm install -g prisma
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Build
         run: npm run build
