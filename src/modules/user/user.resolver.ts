@@ -54,8 +54,13 @@ export class UserResolver {
   @Query(() => UserDto)
   // @UseInterceptors(GraphQLCacheInterceptor)
   getUser(@Args('userId', { type: () => Int }) userId: number) {
-    this.pubSub.publish('new_post', { message: 'hellp' });
     return this.userService.getUserById(userId);
+  }
+
+  @Query(() => UserDto)
+  // @UseInterceptors(GraphQLCacheInterceptor)
+  getProfile(@GetUser() user) {
+    return this.userService.getUserById(user.id);
   }
 
   @Mutation(() => UserDto)
@@ -79,7 +84,7 @@ export class UserResolver {
   // resolved Fields
   @ResolveField('posts', () => [PostDto], { nullable: true })
   posts(@Parent() user: UserDto) {
-    return this.postsService.getPostsByUser(user.id);
+    return this.postsService.getUserPosts(user.id);
   }
 
   @ResolveField('friends', () => [FriendDto], { nullable: true })

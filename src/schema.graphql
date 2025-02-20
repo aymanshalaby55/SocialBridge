@@ -101,6 +101,7 @@ type Query {
   getLikesByPost(postId: Int!): [LikeDto!]!
   getLikesByUser: [LikeDto!]!
   getPostsByUser: [PostDto!]!
+  getProfile: UserDto!
   getUser(userId: Int!): UserDto!
   getUserFriends: [FriendDto!]!
   getUserNotifications(userId: Float!): [NotificationDto!]!

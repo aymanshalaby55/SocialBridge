@@ -33,7 +33,7 @@ export const graphqlConfig = GraphQLModule.forRoot<ApolloDriverConfig>({
 
             (extra as { user: unknown }).user = { user: user };
           } catch (error) {
-            throw new Error('Invalid token');
+            throw new Error(error);
           }
         } else {
           throw new Error('Authorization header missing');

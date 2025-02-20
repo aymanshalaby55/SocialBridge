@@ -60,7 +60,7 @@ export class PostsResolver {
 
   @Query(() => [PostDto])
   getPostsByUser(@GetUser() user) {
-    return this.postsService.getPostsByUser(user.id);
+    return this.postsService.getUserPosts(user.id);
   }
 
   @Mutation(() => PostDto)

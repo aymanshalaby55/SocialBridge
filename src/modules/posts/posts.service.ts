@@ -28,17 +28,17 @@ export class PostsService {
     }
 
     // upload to aws-s3
-    // const { key } = await this.uploadService.uploadFileToS3({
-    //   folderName: 'posts',
-    //   file,
-    // });
-    // const fileUrl = this.uploadService.getLinkByKey(key);
+    const { key } = await this.uploadService.uploadFileToS3({
+      folderName: 'posts',
+      file,
+    });
+    const fileUrl = this.uploadService.getLinkByKey(key);
 
     const newPost = await this.prisma.post.create({
       data: {
         title: post.title,
         content: post.content,
-        file: 'find',
+        file: fileUrl,
         user: {
           connect: { id: userId },
         },
@@ -103,7 +103,7 @@ export class PostsService {
     return true;
   }
 
-  async getPostsByUser(userId: number) {
+  async getUserPosts(userId: number) {
     if (!userId) {
       throw new Error('User ID is required');
     }

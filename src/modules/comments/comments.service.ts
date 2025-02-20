@@ -42,6 +42,8 @@ export class CommentsService {
         postId,
       },
     });
+
+    return comments;
   }
 
   async createCommet(
