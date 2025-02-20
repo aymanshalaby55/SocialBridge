@@ -1,11 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { Like } from '@prisma/client';
 import { LikeDto } from '../../common/dto/like.dto';
+import { sendNotification } from 'src/common/providers/sendNotification.provider';
+import { PubSub } from 'graphql-subscriptions';
 
 @Injectable()
 export class LikesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @Inject('PUB_SUB') private readonly pubSub: PubSub,
+  ) {}
 
   async createLike(
     userId: number,
@@ -35,6 +40,16 @@ export class LikesService {
         emoji,
       },
     });
+
+    const notificationMessage = `${user.name} Liked your Post`;
+    await sendNotification(
+      userId,
+      'Like',
+      notificationMessage,
+      this.prisma,
+      this.pubSub,
+    );
+
     return like;
   }
 

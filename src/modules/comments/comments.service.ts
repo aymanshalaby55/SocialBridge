@@ -1,5 +1,6 @@
 import {
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -7,10 +8,15 @@ import { PrismaService } from '../../prisma.service';
 import { CommentDto } from '../../common/dto/comment.dto';
 import { CreateCommentInput } from './dto/createComment.input';
 import { UpdateCommentInput } from './dto/updateComment.input';
+import { sendNotification } from 'src/common/providers/sendNotification.provider';
+import { PubSub } from 'graphql-subscriptions';
 
 @Injectable()
 export class CommentsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject('PUB_SUB') private pubSub: PubSub,
+  ) {}
 
   async findUserComments(userId: number): Promise<CommentDto[]> {
     return await this.prisma.comment.findMany({
@@ -31,7 +37,7 @@ export class CommentsService {
   }
 
   async getPostComments(postId: number) {
-    const comments = this.prisma.comment.findMany({
+    const comments = await this.prisma.comment.findMany({
       where: {
         postId,
       },
@@ -42,21 +48,24 @@ export class CommentsService {
     createCommentInput: CreateCommentInput,
     userId: number,
   ): Promise<CommentDto> {
-    const post = await this.prisma.post.findUnique({
-      where: { id: createCommentInput.postId },
-    });
-
-    if (!post) {
-      throw new NotFoundException('Post not found');
-    }
-
-    return this.prisma.comment.create({
+    const newComment = await this.prisma.comment.create({
       data: {
         content: createCommentInput.content,
         postId: createCommentInput.postId,
         userId,
       },
     });
+
+    const notificationMessage = 'new comment just added';
+    await sendNotification(
+      userId,
+      'Comment',
+      notificationMessage,
+      this.prisma,
+      this.pubSub,
+    );
+
+    return newComment;
   }
 
   async updateComment(
@@ -64,6 +73,7 @@ export class CommentsService {
     userId: number,
   ): Promise<CommentDto> {
     const { commentId } = updateCommentInput;
+
     const [post, comment] = await Promise.all([
       this.prisma.post.findUnique({
         where: { id: updateCommentInput.postId },

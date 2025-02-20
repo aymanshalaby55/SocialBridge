@@ -4,7 +4,7 @@ import { CreatePostInput } from './dto/createPost.input';
 import { FileUpload, Upload } from 'graphql-upload-ts';
 import { UploadService } from '../upload/upload.service';
 import { PubSub } from 'graphql-subscriptions';
-import { getFriendsIds } from 'src/common/providers/friends.provider';
+import { sendNotification } from 'src/common/providers/sendNotification.provider';
 
 @Injectable()
 export class PostsService {
@@ -45,16 +45,15 @@ export class PostsService {
       },
     });
 
-    const friendIds = await getFriendsIds(userId, this.prisma);
-
-    console.log(friendIds);
-
-    for (const friendId of friendIds) {
-      this.pubSub.publish('New_Notification', {
-        data: 'post',
-        recipientId: friendId,
-      });
-    }
+    // new notification
+    const notificationMessage = `${user.name} posted a new post`;
+    await sendNotification(
+      userId,
+      'Post',
+      notificationMessage,
+      this.prisma,
+      this.pubSub,
+    );
 
     return newPost;
   }

@@ -16,7 +16,6 @@ export class NotificationsGateway implements OnModuleInit {
     this.server.on('connection', (socket) => {
       console.log(socket.id);
     });
-    console.log('connected');
   }
 
   @SubscribeMessage('new_post')

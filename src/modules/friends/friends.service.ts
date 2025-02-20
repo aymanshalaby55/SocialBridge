@@ -1,16 +1,25 @@
 import {
   ForbiddenException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { FriendDto } from '../../common/dto/friend.dto';
+import { PubSub } from 'graphql-subscriptions';
+import { sendNotification } from 'src/common/providers/sendNotification.provider';
 
 @Injectable()
 export class FriendsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Inject('PUB_SUB') private pubSub: PubSub,
+  ) {}
 
-  async addFriend(userId: number, friendUserId: number): Promise<FriendDto> {
+  async addFriend(
+    userId: number,
+    friendUserId: number,
+  ): Promise<FriendDto | null> {
     // Check if users exist
     const [user, friendUser] = await Promise.all([
       this.prisma.user.findUnique({ where: { id: userId } }),
@@ -42,6 +51,15 @@ export class FriendsService {
         status: 'PENDING',
       },
     });
+
+    const notificationMessage = `${friendUser.name} Friend requser`;
+    await sendNotification(
+      userId,
+      'Friend',
+      notificationMessage,
+      this.prisma,
+      this.pubSub,
+    );
 
     return newFriend;
   }
