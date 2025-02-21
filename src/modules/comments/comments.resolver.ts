@@ -3,28 +3,15 @@ import { CommentDto } from '../../common/dto/comment.dto';
 import { CommentsService } from './comments.service';
 import { CreateCommentInput } from './dto/createComment.input';
 import { UpdateCommentInput } from './dto/updateComment.input';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, UseInterceptors } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { GetUser } from '../../common/decorators/getUser.decorator';
+import { GraphQLCacheInterceptor } from 'src/common/interceptors/cache.interceptor';
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => CommentDto)
 export class CommentsResolver {
   constructor(private readonly commentsService: CommentsService) {}
-
-  @Query(() => [CommentDto], { name: 'comments' })
-  getUserComments(
-    @Args('userId', { type: () => Int }) userId: number,
-  ): Promise<CommentDto[]> {
-    return this.commentsService.findUserComments(userId);
-  }
-
-  @Query(() => CommentDto, { name: 'comment' })
-  getCommentById(
-    @Args('id', { type: () => Int }) id: number,
-  ): Promise<CommentDto> {
-    return this.commentsService.findCommentById(id);
-  }
 
   @Mutation(() => CommentDto)
   createComment(
@@ -48,5 +35,21 @@ export class CommentsResolver {
     @GetUser() user,
   ): Promise<boolean> {
     return this.commentsService.delete(id, user.id);
+  }
+
+  @Query(() => [CommentDto], { name: 'comments' })
+  @UseInterceptors(GraphQLCacheInterceptor)
+  getUserComments(
+    @Args('userId', { type: () => Int }) userId: number,
+  ): Promise<CommentDto[]> {
+    return this.commentsService.findUserComments(userId);
+  }
+
+  @Query(() => CommentDto, { name: 'comment' })
+  @UseInterceptors(GraphQLCacheInterceptor)
+  getCommentById(
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<CommentDto> {
+    return this.commentsService.findCommentById(id);
   }
 }

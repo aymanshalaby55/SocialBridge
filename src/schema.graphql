@@ -57,8 +57,7 @@ type Mutation {
   createLike(likeInput: UserLikesInput!): LikeDto!
   createPost(CreatePostInput: CreatePostInput!, file: Upload!): PostDto!
   deleteComment(id: Int!): Boolean!
-  deleteLike(likeId: Int!): LikeDto!
-  deleteLikeByUserAndPost(postId: Int!): LikeDto!
+  deleteLike(postId: Int!): LikeDto!
   deletePost(postId: Int!): Boolean!
   deleteUser: Boolean!
   getPostById(postId: Int!): PostDto!

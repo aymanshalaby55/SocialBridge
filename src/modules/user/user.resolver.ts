@@ -11,7 +11,6 @@ import { UserService } from './user.service';
 import { UpdateUserInput } from './dto/updateUser.input';
 import { GetUser } from '../../common/decorators/getUser.decorator';
 import { UserDto } from '../../common/dto/user.dto';
-import { Inject } from '@nestjs/common';
 import { PostsService } from '../../modules/posts/posts.service';
 import { FriendsService } from '../friends/friends.service';
 import { LikesService } from '../likes/likes.service';
@@ -21,12 +20,12 @@ import { FriendDto } from '../../common/dto/friend.dto';
 import { LikeDto } from '../../common/dto/like.dto';
 import { PostDto } from '../../common/dto/post.dto';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
+import { UseGuards, UseInterceptors } from '@nestjs/common';
+import { GraphQLCacheInterceptor } from '../../common/interceptors/cache.interceptor';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @Resolver(() => UserDto)
-// @UseGuards(JwtAuthGuard)
-// @UseInterceptors(GraphQLCacheInterceptor)
+@UseGuards(JwtAuthGuard)
 export class UserResolver {
   constructor(
     private readonly userService: UserService,
@@ -34,8 +33,6 @@ export class UserResolver {
     private readonly friendsService: FriendsService,
     private readonly likesService: LikesService,
     private readonly commentsService: CommentsService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
-    @Inject('PUB_SUB') private readonly pubSub,
   ) {}
 
   @Mutation(() => UserDto)
@@ -43,18 +40,17 @@ export class UserResolver {
     @Args('image', { type: () => GraphQLUpload }) image: FileUpload,
     @GetUser() user,
   ) {
-    // Assuming there's a method in the service to update the user's profile picture
     await this.userService.updateUserProfilePicture(image, user.id);
   }
 
   @Query(() => UserDto)
-  // @UseInterceptors(GraphQLCacheInterceptor)
+  @UseInterceptors(GraphQLCacheInterceptor)
   getUser(@Args('userId', { type: () => Int }) userId: number) {
     return this.userService.getUserById(userId);
   }
 
   @Query(() => UserDto)
-  // @UseInterceptors(GraphQLCacheInterceptor)
+  @UseInterceptors(GraphQLCacheInterceptor)
   getProfile(@GetUser() user) {
     return this.userService.getUserById(user.id);
   }
@@ -68,6 +64,7 @@ export class UserResolver {
   }
   // make this only for admin.
   @Query(() => [UserDto])
+  @UseInterceptors(GraphQLCacheInterceptor)
   getUsers() {
     return this.userService.getUsers();
   }

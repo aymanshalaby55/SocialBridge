@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    container_name: socialbridge
+    environment:
+      POSTGRES_USER: ayman
+      POSTGRES_PASSWORD: social
+      POSTGRES_DB: mydatabase
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - myapp-network
+
+  redis:
+    image: redis:6
+    container_name: redis
+    ports:
+      - '6380:6379'
+    volumes:
+      - redis_data:/data
+    networks:
+      - myapp-network
+
+  app:
+    build: .
+    container_name: myapp
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - '4040:4040'
+    env_file:
+      - .env
+    networks:
+      - myapp-network
+    command: sh -c "npx prisma migrate dev & npm run start"
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  myapp-network:
+    driver: bridge

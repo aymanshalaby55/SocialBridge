@@ -91,21 +91,6 @@ export class LikesService {
     });
   }
 
-  async deleteLike(id: number): Promise<boolean> {
-    // Validate like exists
-    const like = await this.prisma.like.findUnique({
-      where: { id },
-    });
-    if (!like) {
-      throw new Error('Like not found');
-    }
-
-    await this.prisma.like.delete({
-      where: { id },
-    });
-    return true;
-  }
-
   async updateLikeEmoji(
     userId: number,
     postId: number,

@@ -12,13 +12,14 @@ import { PostsService } from './posts.service';
 import { CreatePostInput } from './dto/createPost.input';
 import { PostDto } from '../../common/dto/post.dto';
 import { JwtAuthGuard } from '../../modules/auth/guards/jwt.guard';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, UseInterceptors } from '@nestjs/common';
 import { GetUser } from '../../common/decorators/getUser.decorator';
 import { CommentsService } from '../comments/comments.service';
 import { CommentDto } from '../../common/dto/comment.dto';
 import { LikeDto } from '../../common/dto/like.dto';
 import { LikesService } from '../likes/likes.service';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
+import { GraphQLCacheInterceptor } from 'src/common/interceptors/cache.interceptor';
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => PostDto)
@@ -57,11 +58,13 @@ export class PostsResolver {
   }
 
   @Query(() => [PostDto])
+  @UseInterceptors(GraphQLCacheInterceptor)
   getPostsByUser(@Args('userId', { type: () => ID }) userId: number) {
     return this.postsService.getUserPosts(userId);
   }
 
   @Mutation(() => PostDto)
+  @UseInterceptors(GraphQLCacheInterceptor)
   getPostById(
     @Args({ name: 'postId', type: () => Int }) postId: number,
     @GetUser() user,
@@ -69,7 +72,7 @@ export class PostsResolver {
     return this.postsService.getPostById(postId, user.id);
   }
 
-  // this for getPostBy id
+  // this for getPostByid
   @ResolveField('comments', () => [CommentDto], { nullable: true })
   getPostComments(@Parent() post) {
     return this.commentService.getPostComments(post.id);

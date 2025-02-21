@@ -13,6 +13,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { pubSubProvider } from './common/providers/pubSub.provider';
 import { graphqlConfig } from './config/graphql.config';
 import { redisConfig } from './config/redis.config';
+import { GraphQLCacheInterceptor } from './common/interceptors/cache.interceptor';
 
 @Global()
 @Module({
@@ -30,7 +31,7 @@ import { redisConfig } from './config/redis.config';
     UploadModule,
     NotificationsModule,
   ],
-  providers: [PrismaService, pubSubProvider],
+  providers: [PrismaService, pubSubProvider, GraphQLCacheInterceptor],
   exports: [PrismaService],
 })
 export class AppModule {}
