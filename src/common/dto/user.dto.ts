@@ -7,11 +7,6 @@ import {
   IsOptional,
 } from 'class-validator';
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { PostDto } from 'src/common/dto/post.dto';
-import { LikeDto } from 'src/common/dto/like.dto';
-import { CommentDto } from './comment.dto';
-import { FriendDto } from './friend.dto';
-import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
 
 @ObjectType()
 export class UserDto {

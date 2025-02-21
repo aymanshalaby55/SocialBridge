@@ -23,7 +23,6 @@ export class GraphQLCacheInterceptor implements NestInterceptor {
     // Get the actual GraphQL query document
     const queryDocument = print(info.operation);
 
-    console.log(queryDocument);
     const key = `graphql:${Buffer.from(queryDocument).toString('base64')}`;
 
     return key;
@@ -57,7 +56,7 @@ export class GraphQLCacheInterceptor implements NestInterceptor {
         }),
       );
     } catch (error) {
-      console.error('Cache error:', error);
+      throw error();
       return next.handle();
     }
   }

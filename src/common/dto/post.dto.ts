@@ -7,13 +7,6 @@ import {
   Min,
   IsOptional,
 } from 'class-validator';
-import { CommentDto } from './comment.dto';
-import { LikeDto } from './like.dto';
-import {
-  FileUpload,
-  GraphQLUpload,
-  graphqlUploadExpress,
-} from 'graphql-upload-ts';
 
 @ObjectType()
 export class PostDto {

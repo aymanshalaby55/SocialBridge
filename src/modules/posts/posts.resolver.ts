@@ -6,7 +6,7 @@ import {
   Query,
   ResolveField,
   Parent,
-  Subscription,
+  ID,
 } from '@nestjs/graphql';
 import { PostsService } from './posts.service';
 import { CreatePostInput } from './dto/createPost.input';
@@ -19,7 +19,6 @@ import { CommentDto } from '../../common/dto/comment.dto';
 import { LikeDto } from '../../common/dto/like.dto';
 import { LikesService } from '../likes/likes.service';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
-import { PubSub } from 'graphql-subscriptions';
 
 @UseGuards(JwtAuthGuard)
 @Resolver(() => PostDto)
@@ -36,7 +35,6 @@ export class PostsResolver {
     @Args('file', { type: () => GraphQLUpload }) file: FileUpload,
     @GetUser() user,
   ) {
-    console.log(file);
     const data = this.postsService.createPost(user.id, post, file);
     return data;
   }
@@ -59,8 +57,8 @@ export class PostsResolver {
   }
 
   @Query(() => [PostDto])
-  getPostsByUser(@GetUser() user) {
-    return this.postsService.getUserPosts(user.id);
+  getPostsByUser(@Args('userId', { type: () => ID }) userId: number) {
+    return this.postsService.getUserPosts(userId);
   }
 
   @Mutation(() => PostDto)

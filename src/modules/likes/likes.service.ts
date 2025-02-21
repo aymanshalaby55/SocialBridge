@@ -81,7 +81,7 @@ export class LikesService {
     const likes = await this.prisma.like.findMany({
       where: { userId },
     });
-    console.log(likes);
+
     return likes;
   }
 

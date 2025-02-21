@@ -63,6 +63,7 @@ type Mutation {
   deleteUser: Boolean!
   getPostById(postId: Int!): PostDto!
   login(loginInput: LoginInput!): String!
+  logout: String!
   markNotificationAsRead(id: Float!): NotificationDto!
   rejectFriendRequest(friendId: Int!): FriendDto!
   signup(signupInput: SignupInput!): String!
@@ -100,17 +101,17 @@ type Query {
   getLikeById(likeId: Int!): LikeDto!
   getLikesByPost(postId: Int!): [LikeDto!]!
   getLikesByUser: [LikeDto!]!
-  getPostsByUser: [PostDto!]!
+  getPostsByUser(userId: ID!): [PostDto!]!
   getProfile: UserDto!
   getUser(userId: Int!): UserDto!
   getUserFriends: [FriendDto!]!
   getUserNotifications(userId: Float!): [NotificationDto!]!
   getUsers: [UserDto!]!
   healthCheck: String!
-  protectedRoute: String!
 }
 
 input SignupInput {
+  confirmPassword: String!
   email: String!
   name: String!
   password: String!

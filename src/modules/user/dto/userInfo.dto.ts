@@ -1,4 +1,4 @@
-import { ObjectType, OmitType, PartialType } from '@nestjs/graphql';
+import { ObjectType } from '@nestjs/graphql';
 import { UserDto } from 'src/common/dto/user.dto';
 
 @ObjectType()

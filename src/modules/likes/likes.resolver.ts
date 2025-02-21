@@ -1,11 +1,4 @@
-import {
-  Args,
-  Int,
-  Mutation,
-  Resolver,
-  Query,
-  ResolveField,
-} from '@nestjs/graphql';
+import { Args, Int, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { LikesService } from './likes.service';
 import { LikeDto } from '../../common/dto/like.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';

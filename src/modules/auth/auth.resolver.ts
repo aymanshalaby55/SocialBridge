@@ -1,13 +1,11 @@
-import { UseGuards, UseInterceptors } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Response } from 'express';
-
 import { AuthService } from './auth.service';
 import { LoginInput } from './dto/login.input';
 import { SignupInput } from './dto/signup.input';
 import { UserDto } from '../../common/dto/user.dto';
+import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from './guards/jwt.guard';
-import { GetUser } from '../../common/decorators/getUser.decorator';
 
 @Resolver(() => UserDto)
 export class AuthResolver {
@@ -52,16 +50,10 @@ export class AuthResolver {
     return access_token;
   }
 
-  // protected rout for testing
-  @Query(() => String)
+  @Mutation(() => String)
   @UseGuards(JwtAuthGuard)
-  protectedRoute(@GetUser() user) {
-    return 'this is protected route';
+  logout(@Context('res') res: Response) {
+    res.clearCookie('jwt');
+    return 'Logged out successfully (remove your JWT token)';
   }
-
-  // @Mutation(() => String)
-  // @UseGuards(JwtAuthGuard)
-  // logout() {
-  //   return 'Logged out successfully (remove your JWT token)';
-  // }
 }

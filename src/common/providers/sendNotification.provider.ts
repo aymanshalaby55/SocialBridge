@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { PubSub } from 'graphql-subscriptions';
 
 export async function sendNotification(
@@ -28,8 +28,6 @@ export async function sendNotification(
   );
 
   // send notifications
-
-  console.log(friendIds);
   for (const id of friendIds) {
     PubSub.publish('Notification', {
       type: type,

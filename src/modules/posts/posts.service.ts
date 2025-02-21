@@ -1,10 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { CreatePostInput } from './dto/createPost.input';
-import { FileUpload, Upload } from 'graphql-upload-ts';
+import { FileUpload } from 'graphql-upload-ts';
 import { UploadService } from '../upload/upload.service';
 import { PubSub } from 'graphql-subscriptions';
-import { sendNotification } from 'src/common/providers/sendNotification.provider';
+import { sendNotification } from '../../common/providers/sendNotification.provider';
+import { PostDto } from '../../common/dto/post.dto';
 
 @Injectable()
 export class PostsService {
@@ -58,9 +59,13 @@ export class PostsService {
     return newPost;
   }
 
-  async updatePost(id: number, post: CreatePostInput, userId: number) {
+  async updatePost(
+    id: number,
+    post: CreatePostInput,
+    userId: number,
+  ): Promise<PostDto> {
     // Verify post exists and belongs to user
-    const existingPost = await this.prisma.post.findFirst({
+    const existingPost = await this.prisma.post.findFirstOrThrow({
       where: {
         id,
         userId,
@@ -82,7 +87,7 @@ export class PostsService {
     return updatedPost;
   }
 
-  async deletePost(id: number, userId: number) {
+  async deletePost(id: number, userId: number): Promise<boolean> {
     if (!id || !userId) {
       throw new Error('Post ID and user ID are required');
     }
@@ -103,7 +108,7 @@ export class PostsService {
     return true;
   }
 
-  async getUserPosts(userId: number) {
+  async getUserPosts(userId: number): Promise<PostDto[]> {
     if (!userId) {
       throw new Error('User ID is required');
     }

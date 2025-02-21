@@ -1,9 +1,4 @@
-import {
-  ForbiddenException,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { FriendDto } from '../../common/dto/friend.dto';
 import { PubSub } from 'graphql-subscriptions';
@@ -116,7 +111,6 @@ export class FriendsService {
 
       return updatedRequest;
     } catch (error) {
-      console.error('Error accepting friend request:', error.message);
       throw error;
     }
   }

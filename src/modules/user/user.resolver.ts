@@ -6,14 +6,12 @@ import {
   Int,
   ResolveField,
   Parent,
-  Subscription,
 } from '@nestjs/graphql';
 import { UserService } from './user.service';
 import { UpdateUserInput } from './dto/updateUser.input';
 import { GetUser } from '../../common/decorators/getUser.decorator';
 import { UserDto } from '../../common/dto/user.dto';
-import { Inject, UseGuards, UseInterceptors } from '@nestjs/common';
-import { JwtAuthGuard } from '../../modules/auth/guards/jwt.guard';
+import { Inject } from '@nestjs/common';
 import { PostsService } from '../../modules/posts/posts.service';
 import { FriendsService } from '../friends/friends.service';
 import { LikesService } from '../likes/likes.service';
@@ -25,8 +23,6 @@ import { PostDto } from '../../common/dto/post.dto';
 import { FileUpload, GraphQLUpload } from 'graphql-upload-ts';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { GraphQLCacheInterceptor } from '../../common/interceptors/cache.interceptor';
-import { PubSub } from 'graphql-subscriptions';
 
 @Resolver(() => UserDto)
 // @UseGuards(JwtAuthGuard)
@@ -99,7 +95,6 @@ export class UserResolver {
 
   @ResolveField('comments', () => [CommentDto], { nullable: true })
   comments(@Parent() user: UserDto) {
-    console.log(user);
     return this.commentsService.findUserComments(user.id);
   }
 }

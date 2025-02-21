@@ -1,5 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty, MinLength, Matches } from 'class-validator';
+import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import { Match } from '../../../common/decorators/match.decorator';
 
 @InputType()
 export class SignupInput {
@@ -13,10 +14,10 @@ export class SignupInput {
   @MinLength(8)
   password: string;
 
-  // @Field()
-  // @IsNotEmpty()
-  // @Matches(/password/, { message: 'Passwords do not match' })
-  // confirmPassword: string;
+  @Field()
+  @IsNotEmpty()
+  @Match('password', { message: 'Passwords do not match' })
+  confirmPassword: string;
 
   @Field()
   @IsNotEmpty()

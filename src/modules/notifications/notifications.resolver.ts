@@ -1,19 +1,8 @@
-import {
-  Args,
-  Context,
-  Int,
-  Mutation,
-  Query,
-  Resolver,
-  Subscription,
-} from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { NotificationsService } from './notifications.service';
-import { Inject, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { Inject } from '@nestjs/common';
 import { PubSub } from 'graphql-subscriptions';
-import { GetUser } from 'src/common/decorators/getUser.decorator';
 import { NotificationDto } from './dto/notification.dto';
-import { Request } from 'express';
 
 @Resolver('Notification')
 export class NotificationsResolver {
@@ -29,7 +18,6 @@ export class NotificationsResolver {
       }
 
       // console.log(context);
-      console.log(payload.friendId, context.user.id);
       // Get user from context
       const { user } = context;
       if (!user) {
@@ -51,7 +39,6 @@ export class NotificationsResolver {
       return notification;
     },
     filter: (payload, variables, context) => {
-      console.log(context);
       const { user } = context;
       return payload.friendId === user.id;
     },
