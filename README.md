@@ -21,6 +21,33 @@
 - **Database**: PostgreSQL
 - **Cache**: Redis
 - **API**: GraphQL
-- **Authentication**: JWT
+- **Real time**: graphql-ws, graphql-subscriptions
+- **Authentication**: Passport-JWT
 
 ## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/social-media-api.git
+   cd social-media-api
+   ```
+
+
+2. Set up environment variables:
+   Create a `.env` file in the root directory and add the following variables:
+   ```
+   DATABASE_URL=postgresql://ayman:social@localhost:5432/mydatabase
+   REDIS_URL=redis://localhost:6380
+   JWT_SECRET=your_jwt_secret_key
+   ```
+
+3. Start the Docker containers:
+   ```bash
+   docker-compose up -d
+   ```
+
+4. The API will be available at:
+   ```
+   http://localhost:your-port/graphql
+  
+
